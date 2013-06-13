@@ -24,7 +24,7 @@ Includes very slightly modified version of [node-clone](https://github.com/pvorb
 Description
 ===========
 
-The API of jqgram API expands upon the PyGram API implementation providing callbacks for node child and label determination in order to provide better flexibility and applicability in Node and browser environments.  You may utilize your own tree structures or follow the DOM, cheerio, or basic object structure examples.
+The jqgram API expands upon the PyGram implementation providing callbacks for node child and label determination in order to provide better flexibility and applicability in Node and browser environments.  You may utilize your own tree structures or follow the DOM, cheerio, or basic object structure examples.
 
 The PQ-Gram edit distance is pseudo-metric:
 
