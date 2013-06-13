@@ -24,43 +24,28 @@
  */
 
 
-;(function(exports, undefined){
+(function(exports, undefined){
     "use strict";
 
-    var setImmediate = setImmediate || require("setimmediate");
-
-    exports.jqgram = { 
-        distance: function(roota, rootb, p, q, depth, cb) {
-            setImmediate(function() {
-                var nodea = Node(roota.root,roota.lfn,roota.cfn,depth);
-                var nodeb = Node(rootb.root,rootb.lfn,rootb.cfn,depth);
-                var profilea = Profile(nodea);
-                var profileb = Profile(nodeb);
-                cb({ "edit_distance": profilea.edit_distance(profileb) });
-            });
-        },
-        Node: Node,
-        Profile: Profile
-    };
-
-    //////////////////////////////////////////////
-    
     function Node(label, lfn, cfn){
         var self = this;
-        if (!(self instanceof Node)) return new Node(label, lfn, cfn);
+        if(!(self instanceof Node)){ return new Node(label, lfn, cfn); }
 
-        if(typeof label == 'string' && label.length > 0){
+        if(typeof label === 'string' && label.length > 0){
             self.tedlabel = label;
             self.tedchildren = [];
-        }else if(typeof label == 'object' && !! lfn && !! cfn){
+        }else if(typeof label === 'object' && !! lfn && !! cfn){
             self.tedlabel = lfn(label);
             self.tedchildren = [];
-            if(typeof self.tedlabel != 'string') return undefined;
-            var kids = cfn(label);
-            if(!! kids){
-                for(var i=0; i<kids.length; i++){
-                    var n = new Node(kids[i],lfn,cfn);
-                    if(!! n && !! n.tedlabel) self.addkid(n);
+            if(typeof self.tedlabel === 'string'){
+                var kids = cfn(label);
+                if(!! kids){
+                    for(var i=0; i<kids.length; i++){
+                        var n = new Node(kids[i],lfn,cfn);
+                        if(!! n && !! n.tedlabel){
+                            self.addkid(n);
+                        }
+                    }
                 }
             }
         }
@@ -74,13 +59,11 @@
             self.tedchildren.push(node);
         }
         return self;
-    }
-
-    //////////////////////////////////////////////
+    };
 
     function Profile(root, p, q){
         var self = this;
-        if (!(self instanceof Profile)) return new Profile(root, p, q);
+        if(!(self instanceof Profile)){ return new Profile(root, p, q); }
         p = p || 2;
         q = q || 3;
         var ancestors = new ShiftRegister(p);
@@ -92,7 +75,7 @@
         var self = this;
         ancestors.shift(root.tedlabel);
         var siblings = new ShiftRegister(q);
-        if(root.tedchildren.length == 0){
+        if(root.tedchildren.length === 0){
             self.append(ancestors.concatenate(siblings));
         }else{
             var childs = root.tedchildren;
@@ -102,18 +85,18 @@
                 self.append(ancestors.concatenate(siblings));
                 self.profile(child, p, q, clone(ancestors));
             }
-            for(var i=0; i<q-1; i++){
+            for(var j=0; j<q-1; j++){
                 siblings.shift("*");
                 self.append(ancestors.concatenate(siblings));
             }
         }
-    }
+    };
 
     Profile.prototype.edit_distance = function(other){
         var self = this;
         var union = self.list.length + other.list.length;
         return 1.0 - 2.0 * (self.intersection(other) / union);
-    }
+    };
 
     Profile.prototype.intersection = function(other){
         var self = this;
@@ -124,7 +107,7 @@
             intersect += self.gram_edit_distance(self.list[i], other.list[j]);
             var listi = self.list[i].join();
             var listj = self.list[j].join();
-            if(listi == listj){
+            if(listi === listj){
                 i += 1;
                 j += 1;
             }else if(listi < listj){
@@ -134,58 +117,60 @@
             }
         }
         return intersect;
-    }
+    };
 
     Profile.prototype.compare = function(a1,a2) {
-        var self = this;
-        if (a1.length != a2.length) return false;
+        if (a1.length !== a2.length){ return false; }
         for (var i = 0; i < a2.length; i++) {
             //if (!self.compare(a1[i],a2[i])) return false;
-            if (a1[i] !== a2[i]) return false;
+            if (a1[i] !== a2[i]){ return false; }
         }
         return true;
-    }
+    };
 
     Profile.prototype.gram_edit_distance = function(gram1, gram2){
         var self = this;
-        distance = 0.0;
+        var distance = 0.0;
         if(self.compare(gram1,gram2)){
             distance = 1.0;
         }
         return distance;
-    }
+    };
 
     Profile.prototype.append = function(value){
         var self = this;
         self.list.push(value);
-    }
+    };
 
     Profile.prototype.len = function(prof) {
         var self = this;
-        if(typeof prof == 'undefined') return self.list.length;
-        else return prof.list.length;
-    }
+        if(typeof prof === 'undefined'){
+            return self.list.length;
+        }else{
+            return prof.list.length;
+        }
+    };
 
     Profile.prototype.repr = function() {
         var self = this;
         return '' + self.list.join(); //should we join?
-    }
+    };
 
     Profile.prototype.str = function() {
         var self = this;
         return '' + self.list.join();
-    }
+    };
 
     Profile.prototype.getitem = function(key){
         var self = this;
         return self.list[key];
-    }
+    };
 
     //////////////////////////////////////////////
 
     function ShiftRegister(size) {
         var self = this;
-        if (!(self instanceof ShiftRegister)) return new ShiftRegister(size);
+        if(!(self instanceof ShiftRegister)){ return new ShiftRegister(size); }
         self.register = [];
         for(var i=0; i<size; i++){
             self.register.push("*");
@@ -198,13 +183,15 @@
         var arr = temp.concat(reg.register);
         //console.log(arr);
         return arr;
-    }
+    };
 
     ShiftRegister.prototype.shift = function(el){
         var self = this;
         self.register.shift();
         self.register.push(el);
-    }
+    };
+
+
 
     //////////////////////////////////////////////
     // node-clone provided by Paul Vorbach:
@@ -214,10 +201,11 @@
     //The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
     function clone(parent, circular) {
-        if (typeof circular == 'undefined')
+        if(typeof circular === 'undefined'){
             circular = false;
+        }
 
-        var useBuffer = typeof Buffer != 'undefined';
+        var useBuffer = (typeof Buffer !== 'undefined');
 
         var circularParent = {};
         var circularResolved = {};
@@ -226,49 +214,51 @@
         function _clone(parent, context, child, cIndex) {
             var i; // Use local context within this function
             // Deep clone all properties of parent into child
-            if (typeof parent == 'object') {
-                if (parent == null)
-                    return parent;
+            if (typeof parent === 'object') {
+                if (parent === null){ return parent; }
                 // Check for circular references
-                for(i in circularParent)
+                for(i in circularParent){
                     if (circularParent[i] === parent) {
-                    // We found a circular reference
-                    circularReplace.push({'resolveTo': i, 'child': child, 'i': cIndex});
-                    return null; //Just return null for now...
-                    // we will resolve circular references later
+                        // We found a circular reference
+                        circularReplace.push({'resolveTo': i, 'child': child, 'i': cIndex});
+                        return null; //Just return null for now...
+                        // we will resolve circular references later
                     }
+                }
 
                 // Add to list of all parent objects
                 circularParent[context] = parent;
                 // Now continue cloning...
                 if (util.isArray(parent)) {
                     child = [];
-                    for(i in parent)
-                    child[i] = _clone(parent[i], context + '[' + i + ']', child, i);
-                }
-                else if (util.isDate(parent))
+                    for(i in parent){
+                        child[i] = _clone(parent[i], context + '[' + i + ']', child, i);
+                    }
+                }else if (util.isDate(parent)){
                     child = new Date(parent.getTime());
-                else if (util.isRegExp(parent))
+                }else if (util.isRegExp(parent)){
                     child = new RegExp(parent.source);
-                else if (useBuffer && Buffer.isBuffer(parent)) {
+                }else if (useBuffer && Buffer.isBuffer(parent)) {
                     child = new Buffer(parent.length);
                     parent.copy(child);
                 } else {
                     child = {};
-
                     // Also copy prototype over to new cloned object
-                    child.__proto__ = parent.__proto__;
+                    // MLM: Not needed. 
+                    //child.__proto__ = parent.__proto__;
                     for(i in parent){
                         // MLM: don't clone on exception:
                         try{
                             child[i] = _clone(parent[i], context + '[' + i + ']', child, i);
-                        }catch(e){ };
+                        }catch(e){ }
                     }
                 }
 
                 // Add to list of all cloned objects
                 circularResolved[context] = child;
-            }else child = parent; //Just a simple shallow copy will do
+            }else{
+                child = parent; //Just a simple shallow copy will do
+            }
             return child;
         }
 
@@ -288,32 +278,37 @@
         } else {
             // Deep clone all properties of parent into child
             var child;
-            if (typeof parent == 'object') {
-                if (parent == null)
+            if (typeof parent === 'object') {
+                if (parent === null){
                     return parent;
+                }
                 if (parent.constructor.name === 'Array') {
                     child = [];
-                    for(i in parent)
-                    child[i] = clone(parent[i], circular);
-                }
-                else if (util.isDate(parent))
+                    for(i in parent){
+                        child[i] = clone(parent[i], circular);
+                    }
+                }else if (util.isDate(parent)){
                     child = new Date(parent.getTime() );
-                else if (util.isRegExp(parent))
+                }else if (util.isRegExp(parent)){
                     child = new RegExp(parent.source);
-                else {
+                }else {
                     child = {};
-                    child.__proto__ = parent.__proto__;
-                    for(i in parent)
-                    child[i] = clone(parent[i], circular);
+                    //MLM: Not needed:
+                    //child.__proto__ = parent.__proto__;
+                    for(i in parent){ 
+                        child[i] = clone(parent[i], circular);
+                    }
                 }
-            }else child = parent; // Just a simple shallow clone will do
+            }else{ 
+                child = parent; // Just a simple shallow clone will do
+            }
             return child;
         }
     }
 
     var objectToString = function(o) {
         return Object.prototype.toString.call(o);
-    }
+    };
 
     var util = {
         isArray: function (ar) {
@@ -326,16 +321,24 @@
             return typeof re === 'object' && objectToString(re) === '[object RegExp]';
         }
     };
-    clone.clonePrototype = function(parent) {
-        if (parent === null)
-            return null;
 
-        var c = function () {};
-        c.prototype = parent;
-        return new c();
+    var setImmediate = setImmediate || require("setimmediate");
+
+    exports.jqgram = {
+        distance: function(roota, rootb, p, q, depth, cb) {
+            setImmediate(function() {
+                var nodea = new Node(roota.root,roota.lfn,roota.cfn,depth);
+                var nodeb = new Node(rootb.root,rootb.lfn,rootb.cfn,depth);
+                var profilea = new Profile(nodea);
+                var profileb = new Profile(nodeb);
+                cb({ "edit_distance": profilea.edit_distance(profileb) });
+            });
+        },
+        Node: Node,
+        Profile: Profile
     };
 
 
-})(typeof exports === 'undefined' ? this['jqgram'] = {} : exports);
+})(typeof exports === 'undefined' ? this.jqgram = {} : exports);
 
 

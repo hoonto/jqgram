@@ -1,5 +1,4 @@
 {
-    "camelcase": true,
     "curly": true,
     "eqeqeq": true,
     "es5": true,
@@ -11,10 +10,7 @@
     "noarg": true,
     "node": true,
     "nonew": true,
-    "nomen": true,
-    "quotmark": "double",
-    "trailing": true,
     "undef": true,
     "unused": true,
-    "white": true
+    "white": false
 }
