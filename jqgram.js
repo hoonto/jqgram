@@ -13,8 +13,7 @@
  * Node:
  *
  * var pygram = require('./pygram');
- * var sys = require('sys');
- * sys.puts(pygram.test());
+ * pygram.distance
  *
  * Browser:
  *
@@ -25,31 +24,23 @@
  */
 
 
-;(function(global, undefined){
+;(function(exports, undefined){
     "use strict";
 
-    var setImmediate = global.setImmediate || (require && !window ? require("setimmediate") : function(fn){setTimeout(fn,0);});
+    var setImmediate = setImmediate || require("setimmediate");
 
-    global.exports.JQGram = JQGram;
-    global.exports.Node = Node;
-    global.exports.Profile = Profile;
-
-    //////////////////////////////////////////////
-    
-    function JQGram(){
-        var s = this;
-        if (!(s instanceof JQGram)) return new JQGram();
-        self = s;
-    };
-
-    JQGram.prototype.Compute = function(roota, rootb, p, q, depth, cb) {
-        setImmediate(function() {
-            var nodea = Node(roota.root,roota.lfn,roota.cfn,depth);
-            var nodeb = Node(rootb.root,rootb.lfn,rootb.cfn,depth);
-            var profilea = Profile(nodea);
-            var profileb = Profile(nodeb);
-            cb({ "edit_distance": profilea.edit_distance(profileb) });
-        });
+    exports.jqgram = { 
+        distance: function(roota, rootb, p, q, depth, cb) {
+            setImmediate(function() {
+                var nodea = Node(roota.root,roota.lfn,roota.cfn,depth);
+                var nodeb = Node(rootb.root,rootb.lfn,rootb.cfn,depth);
+                var profilea = Profile(nodea);
+                var profileb = Profile(nodeb);
+                cb({ "edit_distance": profilea.edit_distance(profileb) });
+            });
+        },
+        Node: Node,
+        Profile: Profile
     };
 
     //////////////////////////////////////////////
@@ -320,7 +311,7 @@
         }
     }
 
-    objectToString = function(o) {
+    var objectToString = function(o) {
         return Object.prototype.toString.call(o);
     }
 
@@ -345,6 +336,6 @@
     };
 
 
-})(typeof global === "object" && global ? global : this);
+})(typeof exports === 'undefined' ? this['jqgram'] = {} : exports);
 
 

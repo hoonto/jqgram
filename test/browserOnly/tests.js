@@ -11,3 +11,13 @@ assert.strictEqual = function (x, y) {
         throw new Error(x + " !== " + y);
     }
 };
+
+specify("Profile Equality", function(done) {
+    assert(!false);
+    done();
+});
+
+specify("Profile Equality 2", function (done) {
+    assert.strictEqual("TEST", "TEST");
+    done();
+});
