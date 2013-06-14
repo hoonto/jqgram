@@ -23,6 +23,7 @@
  * </script>
  */
 
+require("setimmediate");
 
 (function(exports, undefined){
     "use strict";
@@ -76,7 +77,6 @@
         var self = this;
         ancestors.shift(root.tedlabel);
         var siblings = new ShiftRegister(q);
-        if(!root.tedchildren) console.dir(root);
         if(root.tedchildren.length === 0){
             self.append(ancestors.concatenate(siblings));
         }else{
@@ -155,23 +155,6 @@
         }
     };
 
-    Profile.prototype.repr = function() {
-        var self = this;
-        return '' + self.list.join(); //should we join?
-    };
-
-    Profile.prototype.str = function() {
-        var self = this;
-        return '' + self.list.join();
-    };
-
-    Profile.prototype.getitem = function(key){
-        var self = this;
-        return self.list[key];
-    };
-
-    //////////////////////////////////////////////
-
     function ShiftRegister(size) {
         var self = this;
         if(!(self instanceof ShiftRegister)){ return new ShiftRegister(size); }
@@ -185,7 +168,6 @@
         var self = this;
         var temp = self.register.slice(0);//self.list(self.register);
         var arr = temp.concat(reg.register);
-        //console.log(arr);
         return arr;
     };
 
@@ -335,16 +317,18 @@
         }
     };
 
-    var setImmediate = setImmediate || require("setimmediate");
+    //var setImmediate = (!!setImmediate ? setImmediate : require("setimmediate"));
 
     exports.jqgram = {
-        distance: function(roota, rootb, p, q, depth, cb) {
+        distance: function(roota, rootb, opts, cb) {
+            opts.p = opts.p || 2;
+            opts.q = opts.q || 3;
             setImmediate(function() {
-                var nodea = new Node(roota.root,roota.lfn,roota.cfn,depth);
-                var nodeb = new Node(rootb.root,rootb.lfn,rootb.cfn,depth);
-                var profilea = new Profile(nodea);
-                var profileb = new Profile(nodeb);
-                cb({ "edit_distance": profilea.edit_distance(profileb) });
+                var nodea = new Node(roota.root,roota.lfn,roota.cfn);
+                var nodeb = new Node(rootb.root,rootb.lfn,rootb.cfn);
+                var profa = new Profile(nodea, opts.p, opts.q);
+                var profb = new Profile(nodeb, opts.p, opts.q);
+                cb({ "distance": profa.edit_distance(profb) });
             });
         },
         Node: Node,

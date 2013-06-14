@@ -6,7 +6,7 @@ The PQ-Gram approximation is much faster than obtaining the true edit distance v
 
 Often in real-world applications it is not necessary to know the true edit distance if a relative approximation of multiple trees to a known standard can be obtained.  Javascript, in the browser and now on the server with the advent of Node.js deal frequently with tree structures and end-user performance is usually critical in algorithm implementation and design; thus jqgram.
 
-jQGram is currently used in applications in private beta at hoonto.com and clipwidget.com. 
+jqgram is currently used in applications in private beta at hoonto.com and clipwidget.com. 
 
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
@@ -33,7 +33,7 @@ In effect, this means that if the PQ-Gram distance between tree A and B is less 
 
 # Usage
 
-To use jqgram distance you need only create a jqgram object providing callbacks for label and children definition for trees being compared.  As the callbacks are per-tree, you can approximate edit distance between two different tree implementations.  For example, you could compare a tree generated from JSON with a DOM subtree.  You only need to pass in the root of each tree and the provided label and child callback functions will be used to generate the rest of the tree.  Another use case might be comparing an abstract syntax tree generated with Esprima with that created by Uglify2 or Acorn, or with something entirely of your own creation.
+To use jqgram distance you need only create a jqgram object providing callbacks for label and children definition for trees being compared.  As the callbacks are per-tree, you can approximate edit distance between two different tree implementations.  For example, you could compare a tree generated from JSON with a DOM subtree.  You only need to pass in the root of each tree and the provided label and child callback functions will be used to generate the rest of the tree.  Another use case might be comparing an abstract syntax tree generated with Esprima with that created by Uglify2 or Acorn, or with something entirely of your own creation.  Note: default p and q are 2 and 3 respectively.
 
 ``` js
  not available in npm just yet.

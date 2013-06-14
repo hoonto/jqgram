@@ -57,6 +57,7 @@ function runProfileTests() {
     }
 
     specify("Profile creation and equality", function(done) {
+        this.timeout(1000*60*5);
         // Tests the creation of profiles against known profiles.
         var small_tree1_equality = checkProfileEquality(profiles[0], small_profile1);
         var small_tree2_equality = checkProfileEquality(profiles[1], small_profile2);
@@ -72,6 +73,7 @@ function runProfileTests() {
     });
 
     specify("Symmetry", function(done){
+        this.timeout(1000*60*5);
         // x.edit_distance(y) should be the same as y.edit_distance(x)
         for(var i=0; i<profiles.length; i++){
             for(var j=0; j<profiles.length; j++){
@@ -86,6 +88,7 @@ function runProfileTests() {
     });
 
     specify("Edit distance boundaries", function(done){
+        this.timeout(1000*60*5);
         // x.edit_distance(y) should always return a value between 0 and 1
         for(var i=0; i<profiles.length; i++){
             for(var j=0; j<profiles.length; j++){
@@ -99,6 +102,7 @@ function runProfileTests() {
     });
 
     specify("Triangle inequality", function(done){
+        this.timeout(1000*60*5);
         // The triangle inequality should hold true for any three trees
         for(var i=0; i<profiles.length; i++){
             for(var j=0; j<profiles.length; j++){
@@ -115,6 +119,7 @@ function runProfileTests() {
     });
 
     specify("Identity", function(done){
+        this.timeout(1000*60*5);
         // x.edit_distance(x) should always be 0
         for(var i=0; i<profiles.length; i++){
             var p1 = profiles[i];
@@ -126,6 +131,7 @@ function runProfileTests() {
 
 function runRegisterTests() {
      specify("Register creation", function(done){
+        this.timeout(1000*60*5);
         // should create a register of the given size filled with '*'
         var sizes = [];
         for(var i=0; i<10; i++){
@@ -133,7 +139,7 @@ function runRegisterTests() {
         }
         for(var j=0; j<sizes.length; j++){
             var size = sizes[j];
-            var reg = ShiftRegister(size);
+            var reg = new ShiftRegister(size);
             assert.strictEqual(size === reg.len(), true);
             for(var k=0; k<reg.len(); k++){
                 var item = reg.register[k]
@@ -144,11 +150,12 @@ function runRegisterTests() {
     });
 
      specify("Register concatenation", function(done){
+        this.timeout(1000*60*5);
         // concatenate should return the union of the two registers as an array
-        var reg_one = ShiftRegister(2);
+        var reg_one = new ShiftRegister(2);
         reg_one.shift("a");
         reg_one.shift("b");
-        var reg_two = ShiftRegister(3);
+        var reg_two = new ShiftRegister(3);
         reg_two.shift("c");
         reg_two.shift("d");
         reg_two.shift("e");
@@ -158,8 +165,9 @@ function runRegisterTests() {
     });
 
     specify("Register shift", function(done){
+        this.timeout(1000*60*5);
         // shift removes item from the left and adds a new item to the right
-        var reg = ShiftRegister(3);
+        var reg = new ShiftRegister(3);
         reg.register[0] = "a";
         reg.register[1] = "b";
         reg.register[2] = "c";
@@ -171,6 +179,263 @@ function runRegisterTests() {
     });
 
 
+}
+
+
+function runBlackBoxTests() {
+
+    specify("Result tests", function(done){
+        this.timeout(1000*60*5);
+        var t1 = {
+            "name": "a", 
+            "kiddos": [
+                { "name": "b", 
+                "kiddos": [
+                        { "name": "c" },
+                        { "name": "d" }
+                    ]
+                },
+                { "name": "e" },
+                { "name": "f" }
+            ]
+        }
+
+        var t2 = {
+            "name": "a", 
+            "kiddos": [
+                { "name": "b", 
+                "kiddos": [
+                        { "name": "c" },
+                        { "name": "d" }
+                    ]
+                },
+                { "name": "e" }, 
+                { "name": "x" }
+            ]
+        }
+
+        var t3 = {
+            "name": "a", 
+            "kiddos": [
+                { "name": "b", 
+                "kiddos": [
+                        { "name": "j" }
+                    ]
+                },
+                { "name": "e" },
+                { "name": "f" }
+            ]
+        }
+
+        var t4 = {
+            "name": "a", 
+            "kiddos": [
+                { "name": "b", 
+                "kiddos": [
+                        { "name": "c" },
+                    ]
+                },
+                { "name": "e" },
+                { "name": "f" }
+            ]
+        }
+
+        var t5 = {
+            "name": "a", 
+            "kiddos": [
+                { "name": "b" }, 
+                { "name": "e" },
+                { "name": "f" }
+            ]
+        }
+
+        var t6 = {
+            "name": "b", 
+            "kiddos": [
+                { "name": "n" }, 
+                { "name": "e" },
+                { "name": "g" }
+            ]
+        }
+
+        var t7 = {
+            "name": "b", 
+            "kiddos": [
+                { "name": "n" }, 
+                { "name": "e" },
+                { "name": "f",
+                "kiddos": [
+                    { "name": "g",
+                    "kiddos": [
+                        { "name": "h" }
+                    ]
+                    }
+                ]
+                }
+            ]
+        }
+
+        var t8 = {
+            "name": "a", 
+            "kiddos": [
+                { "name": "b" }, 
+                { "name": "z" },
+                { "name": "f",
+                "kiddos": [
+                    { "name": "g",
+                    "kiddos": [
+                        { "name": "h" }
+                    ]
+                    }
+                ]
+                }
+            ]
+        }
+
+        var t9 = {
+            "name": "a", 
+            "kiddos": [
+                { "name": "b" }, 
+                { "name": "c" },
+                { "name": "d" },
+                { "name": "f", 
+                "kiddos": [
+                    { "name": "f",
+                    "kiddos": [
+                        { "name": "x" }
+                    ]
+                    }
+                ]
+                }
+            ]
+        }
+
+
+        /*
+        distance: function(roota, rootb, opts, cb) {
+            setImmediate(function() {
+                var nodea = new Node(roota.root,roota.lfn,roota.cfn,depth);
+                var nodeb = new Node(rootb.root,rootb.lfn,rootb.cfn,depth);
+                var profilea = new Profile(nodea);
+                var profileb = new Profile(nodeb);
+                cb({ "edit_distance": profilea.edit_distance(profileb) });
+            });
+        }
+        */
+        var results = [[
+            parseFloat('0'),
+            parseFloat('0.3076923076923077'),
+            parseFloat('0.9166666666666666'),
+            parseFloat('0.75'),
+            parseFloat('0.9047619047619048'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('0.9259259259259259'),
+            parseFloat('0.9310344827586207')
+        ],[
+            parseFloat('0.3076923076923077'),
+            parseFloat('0'),
+            parseFloat('0.9166666666666666'),
+            parseFloat('0.75'),
+            parseFloat('0.9047619047619048'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('0.9259259259259259'),
+            parseFloat('0.9310344827586207')
+        ],[
+            parseFloat('0.9166666666666666'),
+            parseFloat('0.9166666666666666'),
+            parseFloat('0'),
+            parseFloat('0.36363636363636365'),
+            parseFloat('0.8947368421052632'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('0.92'),
+            parseFloat('0.9259259259259259')
+        ],[
+            parseFloat('0.75'),
+            parseFloat('0.75'),
+            parseFloat('0.36363636363636365'),
+            parseFloat('0'),
+            parseFloat('0.8947368421052632'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('0.92'),
+            parseFloat('0.9259259259259259')
+        ],[
+            parseFloat('0.9047619047619048'),
+            parseFloat('0.9047619047619048'),
+            parseFloat('0.8947368421052632'),
+            parseFloat('0.8947368421052632'),
+            parseFloat('0'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('0.8181818181818181'),
+            parseFloat('0.8333333333333334')
+        ],[
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('0'),
+            parseFloat('0.6363636363636364'),
+            parseFloat('1'),
+            parseFloat('1')
+        ],[
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('0.6363636363636364'),
+            parseFloat('0'),
+            parseFloat('0.7142857142857143'),
+            parseFloat('1')
+        ],[
+            parseFloat('0.9259259259259259'),
+            parseFloat('0.9259259259259259'),
+            parseFloat('0.92'),
+            parseFloat('0.92'),
+            parseFloat('0.8181818181818181'),
+            parseFloat('1'),
+            parseFloat('0.7142857142857143'),
+            parseFloat('0'),
+            parseFloat('0.8666666666666667')
+        ],[
+            parseFloat('0.9310344827586207'),
+            parseFloat('0.9310344827586207'),
+            parseFloat('0.9259259259259259'),
+            parseFloat('0.9259259259259259'),
+            parseFloat('0.8333333333333334'),
+            parseFloat('1'),
+            parseFloat('1'),
+            parseFloat('0.8666666666666667'),
+            parseFloat('0')
+        ]];
+
+        var roots = [t1, t2, t3, t4, t5, t6, t7, t8, t9];
+        for(var i=0,ic=0; i<roots.length; i++){
+            for(var j=0,jc=0; j<roots.length; j++){
+                distance({
+                    root: roots[i], 
+                    lfn: function(node){ return node.name; },
+                    cfn: function(node){ return node.kiddos; }
+                },{
+                    root: roots[j],
+                    lfn: function(node){ return node.name; },
+                    cfn: function(node){ return node.kiddos; }
+                },{ p:2, q:3, depth:10 },
+                function(result) { 
+                    assert.strictEqual(results[ic][jc++] === result.distance, true);
+                    if(jc%9 == 0){ ic++; jc=0; }
+
+                    if(ic == 9 && jc == 0) done();
+
+                });
+            }
+        }
+    });
 }
 
 function arrayEquals(a, b){
@@ -222,7 +487,7 @@ function randtree(opts){
     var root = new Node("root",lfn,cfn);
     var p = [root];
     var c = [];
-    for(var x=0; x<depth; x++){
+    //for(var x=0; x<depth; x++){
         for(var y=0; y<p.length; y++){
             var py = p[y];
             var randrange = randint(1,1+width);
@@ -235,111 +500,12 @@ function randtree(opts){
         }
         p = c;
         c = [];
-    }
+    //}
     return root;
 }
 
-
-
-
 runProfileTests();
 runRegisterTests();
-
-//assert(!false);
-//assert.strictEqual("TEST", "TEST");
-
-
-////////////////////////////////////////////////////
-/*
-console.log('document keys!');
-    self.docclone = new TED().clone(document,true);
-    console.log('document.location == ' + self.docclone.location);
-    console.log('document.location.href == ' + self.docclone.location.href);
-    self.docclone.location.href = 'http://this.is.cool';
-    console.log('document.location.href now == ' + self.docclone.location.href);
-    //var divclone = docclone.createElement('div');
-    console.log('typeof docclone == ' + typeof self.docclone);
-    console.log('typeof docclone.getElementsByTagName == ' + typeof self.docclone.getElementsByTagName);
-    var bodylist = self.docclone.getElementsByTagName('BODY');
-    console.log('bodylist == ' + bodylist.length);
-
-
-
-
-                        var seekroot2 = function(troot,iroots){
-                            var t = TED();
-                            var trootlen = troot.find('*').length;
-                            //console.log('troot.length == ' + trootlen);
-
-                            var bestedit = Number.MAX_VALUE;
-                            if(iroots && iroots.length > 0){
-                                var besti = iroots[0];
-                                var bestited;
-                                for(var i=0; i<iroots.length; i++){
-                                    var iroot = iroots[i];
-                                    var irootlen = $(iroot).find('*').length;
-                                    //console.log(irootlen);
-                                    //var rootr = trootlen / irootlen;
-                                    //console.log('rootr == ' + rootr);
-                                    //if(trootlen > 3 && irootlen > 3 && rootr == 1){ 
-                                        var total = t.TEdit({
-                                            root: troot[0],
-                                            lfn: function(node){
-                                                return node.name;
-                                            },
-                                            cfn: function(node){
-                                                var retarr = [];
-                                                if(!! node.attribs &&
-                                                    !! node.attribs.class){
-                                                    retarr = retarr.concat(node.attribs.class.split(' '));
-                                                }
-                                                if(!! node.attribs && 
-                                                    !! node.attribs.id){
-                                                    retarr.push(node.attribs.id);
-                                                }
-                                                retarr = retarr.concat(node.children);
-                                                return retarr;
-                                            }
-                                        },{
-                                            root: iroot,
-                                            lfn: function(node) {
-                                                return node.nodeName.toLowerCase();
-                                            },
-                                            cfn: function(node) {
-                                                var retarr = [];
-                                                if(!! node.attributes &&
-                                                !! node.attributes.class &&
-                                                !! node.attributes.class.nodeValue){
-                                                    retarr = retarr.concat(node.attributes.class.nodeValue.split(' '));
-                                                }
-                                                if(!! node.attributes &&
-                                                !! node.attributes.id &&
-                                                !! node.attributes.id.nodeValue) {
-                                                    retarr.push(node.attributes.id.nodeValue);
-                                                }
-                                                for(var i=0; i<node.children.length; i++){
-                                                    retarr.push(node.children[i]);
-                                                }
-                                                return retarr;
-                                            }
-                                        },1,1,Number.MAX_VALUE);
-
-                                        if(total < bestedit){
-                                            //console.log('^^ chosen ^^');
-                                            bestedit = total;
-                                            besti = iroot;
-                                        }
-                                    //}
-                                }
-                                //console.log('--- final ited: ');
-                                //console.log(appAPI.JSON.stringify(bestited));
-                                
-                                return $(besti);
-                            }
-                        }
-*/
-
-
-
+runBlackBoxTests();
 
 
