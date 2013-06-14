@@ -59,15 +59,24 @@ function runProfileTests() {
     specify("Profile creation and equality", function(done) {
         this.timeout(1000*60*5);
         // Tests the creation of profiles against known profiles.
+        console.log('Profile Creation 1');
         var small_tree1_equality = checkProfileEquality(profiles[0], small_profile1);
+        console.log('Profile Creation 2');
         var small_tree2_equality = checkProfileEquality(profiles[1], small_profile2);
+        console.log('Profile Creation 3');
         var known_tree1_equality = checkProfileEquality(profiles[2], known_profile1);
+        console.log('Profile Creation 4');
         var known_tree2_equality = checkProfileEquality(profiles[3], known_profile2);
+        console.log('Profile Creation 5');
 
         assert.strictEqual(small_tree1_equality, true);
+        console.log('Profile Creation 6');
         assert.strictEqual(small_tree2_equality, true);
+        console.log('Profile Creation 7');
         assert.strictEqual(known_tree1_equality, true);
+        console.log('Profile Creation 8');
         assert.strictEqual(known_tree2_equality, true);
+        console.log('Profile Creation 9');
         
         done();
     });
@@ -110,7 +119,10 @@ function runProfileTests() {
                     var p1 = profiles[i];
                     var p2 = profiles[j];
                     var p3 = profiles[k];
-                    var t1 = (p1.edit_distance(p3) <= p1.edit_distance(p2) + p2.edit_distance(p3));
+                    var dist1 = p1.edit_distance(p3);
+                    var dist2 = p1.edit_distance(p2);
+                    var dist3 = p2.edit_distance(p3);
+                    var t1 = (dist1 <= dist2 + dist3);
                     assert.strictEqual(t1,true);
                 }
             }

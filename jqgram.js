@@ -317,7 +317,7 @@ require("setimmediate");
         }
     };
 
-    //var setImmediate = (!!setImmediate ? setImmediate : require("setimmediate"));
+    var setImmediate = !!setImmediate ? setImmediate : function(fn){setTimeout(fn,0); };
 
     exports.jqgram = {
         distance: function(roota, rootb, opts, cb) {
