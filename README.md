@@ -129,11 +129,11 @@ var realdom = $('body');
 // The lfn and cfn functions allow you to specify
 // how labels and children should be defined:
 jq.distance({
-    root: root1,
+    root: mydom,
     lfn: function(node){ return node.name; },
     cfn: function(node){ return  node.chittles; }
 },{
-    root: root2,
+    root: realdom,
     lfn: function(node){ 
         return node.nodeName.toLowerCase(); 
     },
@@ -200,7 +200,7 @@ var realdom = $('body');
 // The lfn and cfn functions allow you to specify
 // how labels and children should be defined:
 jq.distance({
-    root: root1,
+    root: cheeriodom,
     lfn: function(node){ 
         // We don't have to lowercase this because we already
         // asked cheerio to do that for us above (lowerCaseTags).
@@ -221,7 +221,7 @@ jq.distance({
         return  retarr;
     }
 },{
-    root: root2,
+    root: realdom,
     lfn: function(node){ 
         return node.nodeName.toLowerCase(); 
     },
