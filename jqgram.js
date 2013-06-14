@@ -12,15 +12,12 @@
 /**
  * Node:
  *
- * var pygram = require('./pygram');
- * pygram.distance
+ * var pygram = require('jqgram');
  *
  * Browser:
  *
- * <script src="pygram.js"></script>
- * <script>
- *    alert(pygram.test());
- * </script>
+ * <script src="setimmediate.js"></script>
+ * <script src="jqgram.js"></script>
  */
 
 require("setimmediate");
