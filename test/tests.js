@@ -7,6 +7,7 @@ var kcombo = require('./kcombinations').combos.k_combinations;
 
 var Node = jqgram.Node;
 var Profile = jqgram.Profile;
+var ShiftRegister = jqgram.ShiftRegister;
 var distance = jqgram.distance;
 
 var lfn = function(node) {
@@ -16,7 +17,7 @@ var cfn = function(node) {
     return node.tedchildren;
 }
 
-function runTests() {
+function runProfileTests() {
     var p = 2;
     var q = 3;
     var num_random = 10;
@@ -121,6 +122,53 @@ function runTests() {
         }
         done();
     });
+}
+
+function runRegisterTests() {
+     specify("Register creation", function(done){
+        // should create a register of the given size filled with '*'
+        var sizes = [];
+        for(var i=0; i<10; i++){
+            sizes.push(randint(1,50));
+        }
+        for(var j=0; j<sizes.length; j++){
+            var size = sizes[j];
+            var reg = ShiftRegister(size);
+            assert.strictEqual(size === reg.len(), true);
+            for(var k=0; k<reg.len(); k++){
+                var item = reg.register[k]
+                assert.strictEqual(item === "*", true);
+            }
+        }
+        done();
+    });
+
+     specify("Register concatenation", function(done){
+        // concatenate should return the union of the two registers as an array
+        var reg_one = ShiftRegister(2);
+        reg_one.shift("a");
+        reg_one.shift("b");
+        var reg_two = ShiftRegister(3);
+        reg_two.shift("c");
+        reg_two.shift("d");
+        reg_two.shift("e");
+        var reg_cat = reg_one.concatenate(reg_two);
+        assert.strictEqual(reg_cat.join('') === "abcde", true);
+        done();
+    });
+
+    specify("Register shift", function(done){
+        // shift removes item from the left and adds a new item to the right
+        var reg = ShiftRegister(3);
+        reg.register[0] = "a";
+        reg.register[1] = "b";
+        reg.register[2] = "c";
+        reg.shift("d");
+        assert.strictEqual(reg.register[0] === "b", true);
+        assert.strictEqual(reg.register[1] === "c", true);
+        assert.strictEqual(reg.register[2] === "d", true);
+        done();
+    });
 
 
 }
@@ -194,7 +242,8 @@ function randtree(opts){
 
 
 
-runTests();
+runProfileTests();
+runRegisterTests();
 
 //assert(!false);
 //assert.strictEqual("TEST", "TEST");

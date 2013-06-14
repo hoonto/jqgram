@@ -195,6 +195,15 @@
         self.register.push(el);
     };
 
+    ShiftRegister.prototype.len = function(reg) {
+        var self = this;
+        if(typeof reg === 'undefined'){
+            return self.register.length;
+        }else{
+            return reg.register.length;
+        }
+    };
+
 
 
     //////////////////////////////////////////////
@@ -339,7 +348,8 @@
             });
         },
         Node: Node,
-        Profile: Profile
+        Profile: Profile,
+        ShiftRegister: ShiftRegister
     };
 
 
