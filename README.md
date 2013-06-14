@@ -35,23 +35,219 @@ In effect, this means that if the PQ-Gram distance between tree A and B is less 
 
 To use jqgram distance you need only create a jqgram object providing callbacks for label and children definition for trees being compared.  As the callbacks are per-tree, you can approximate edit distance between two different tree implementations.  For example, you could compare a tree generated from JSON with a DOM subtree.  You only need to pass in the root of each tree and the provided label and child callback functions will be used to generate the rest of the tree.  Another use case might be comparing an abstract syntax tree generated with Esprima with that created by Uglify2 or Acorn, or with something entirely of your own creation.  Note: default p and q are 2 and 3 respectively.
 
+(Note that jqgram uses the setimmediate module);
+
 ``` js
- not available in npm just yet.
-// finishing testing first. 
-// clone for now, npm install jqgram coming later
+npm install jqgram
 ```
 
 
-# example
+# Basic example
 
 ``` js
-//code example forthcoming
+var jq = require("../jqgram").jqgram;
+var root1 = {
+    "thelabel": "a",
+    "thekids": [
+        { "thelabel": "b",
+        "thekids": [
+                { "thelabel": "c" },
+                { "thelabel": "d" }
+            ]
+        },
+        { "thelabel": "e" },
+        { "thelabel": "f" }
+    ]
+}
+
+var root2 = {
+    "name": "a",
+    "kiddos": [
+        { "name": "b",
+        "kiddos": [
+                { "name": "c" },
+                { "name": "d" },
+                { "name": "y" }
+            ]
+        },
+        { "name": "e" },
+        { "name": "x" }
+    ]
+}
+
+jq.distance({
+    root: root1,
+    lfn: function(node){ return node.thelabel; },
+    cfn: function(node){ return node.thekids; }
+},{
+    root: root2,
+    lfn: function(node){ return node.name; },
+    cfn: function(node){ return node.kiddos; }
+},{ p:2, q:3, depth:10 },
+function(result) {
+    console.log(result.distance);
+});
 ```
 
 ***
 
 ```
-//code example output forthcoming
+0.6428571428571428
+```
+
+# DOM vs Object 
+
+``` js
+// This could probably be optimized significantly, but is a real-world
+// example of how to use tree edit distance in the browser.
+
+// jqgram:
+var jq = require("../jqgram").jqgram;
+
+// Make a DOM-ish structure out of objects:
+var mydom = {
+    "name": "body",
+    "chittles": [ // http://www.urbandictionary.com/define.php?term=chittle
+        { "name": "div",
+        "chittles": [
+                { "name": "a" }, // The id attribute
+                { "name": "div",
+                  "chittles": [
+                    { "name": "c" }, // The "c" class
+                    { "name": "d" }, // The "d" class
+                    { "name": "span" }
+                  ] 
+                }
+            ]
+        },
+    ]
+}
+
+// For ease, lets assume you have jQuery laoded:
+var realdom = $('body');
+
+// The lfn and cfn functions allow you to specify
+// how labels and children should be defined:
+jq.distance({
+    root: root1,
+    lfn: function(node){ return node.name; },
+    cfn: function(node){ return  node.chittles; }
+},{
+    root: root2,
+    lfn: function(node){ 
+        return node.nodeName.toLowerCase(); 
+    },
+    cfn: function(node){ 
+        var retarr = [];
+        if(!! node.attributes && !! node.attributes.class && !! node.attributes.class.nodeValue){
+            retarr = retarr.concat(node.attributes.class.nodeValue.split(' '));
+        }
+        if(!! node.attributes && !! node.attributes.id && !! node.attributes.id.nodeValue) {
+            retarr.push(node.attributes.id.nodeValue);
+        }
+        for(var i=0; i<node.children.length; ++i){
+            retarr.push(node.children[i]);
+        }
+        return retarr;
+    }
+},{ p:2, q:3, depth:10 },
+function(result) {
+    console.log(result.distance);
+});
+```
+
+***
+
+```
+// Output depends on how your pseudo-DOM subtree compares with the real DOM!
+```
+
+
+
+# DOM vs Cheerio example
+
+``` js
+// This could probably be optimized significantly, but is a real-world
+// example of how to use tree edit distance in the browser.
+
+// For cheerio, you'll have to browserify, 
+// which requires some fiddling around
+// due to cheerio's dynamically generated 
+// require's (good grief) that browserify 
+// does not see due to the static nature 
+// of its code analysis (dynamic off-line
+// analysis is hard, but doable).
+//
+// Ultimately, the goal is to end up with 
+// something like this in the browser:
+
+var cheerio = require('./lib/cheerio'); 
+
+// The easy part, jqgram:
+var jq = require("../jqgram").jqgram;
+
+// Make a cheerio DOM:
+var html = "<body><div id="a"><div class="c d"><span>Irrelevent text</span></div></div></body>";
+
+var cheeriodom = cheerio.load(html, {
+    ignoreWhitespace: false,
+    lowerCaseTags: true
+});
+
+// For ease, lets assume you have jQuery laoded:
+var realdom = $('body');
+
+// The lfn and cfn functions allow you to specify
+// how labels and children should be defined:
+jq.distance({
+    root: root1,
+    lfn: function(node){ 
+        // We don't have to lowercase this because we already
+        // asked cheerio to do that for us above (lowerCaseTags).
+        return node.name; 
+    },
+    cfn: function(node){ 
+        // Cheerio maintains attributes in the attribs array:
+        // We're going to put id's and classes in as children 
+        // of nodes in our cheerio tree
+        var retarr = []; 
+        if(!! node.attribs && !! node.attribs.class){
+            retarr = retarr.concat(node.attribs.class.split(' '));
+        }
+        if(!! node.attribs && !! node.attribs.id){
+            retarr.push(node.attribs.id);
+        }
+        retarr = retarr.concat(node.children);
+        return  retarr;
+    }
+},{
+    root: root2,
+    lfn: function(node){ 
+        return node.nodeName.toLowerCase(); 
+    },
+    cfn: function(node){ 
+        var retarr = [];
+        if(!! node.attributes && !! node.attributes.class && !! node.attributes.class.nodeValue){
+            retarr = retarr.concat(node.attributes.class.nodeValue.split(' '));
+        }
+        if(!! node.attributes && !! node.attributes.id && !! node.attributes.id.nodeValue) {
+            retarr.push(node.attributes.id.nodeValue);
+        }
+        for(var i=0; i<node.children.length; ++i){
+            retarr.push(node.children[i]);
+        }
+        return retarr;
+    }
+},{ p:2, q:3, depth:10 },
+function(result) {
+    console.log(result.distance);
+});
+```
+
+***
+
+```
+// Output depends on how your pseudo-DOM subtree compares with the real DOM!
 ```
 
 
