@@ -24,7 +24,7 @@
     },
     "scripts": {
         "lint": "jshint jqgram.js",
-        "test": "mocha test/tests.js",
+        "test": "mocha test/tests.js"
     },
     "testling": {
         "files": "test/tests.js",

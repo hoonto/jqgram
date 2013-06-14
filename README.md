@@ -10,8 +10,6 @@ jQGram is currently used in applications in private beta at hoonto.com and clipw
 
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
-[![build status](https://secure.travis-ci.org/hoonto/jqgram.png)](http://travis-ci.org/hoonto/jqgram)
-
 
 # Credits and Inspirations
 

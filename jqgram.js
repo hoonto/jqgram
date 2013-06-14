@@ -56,6 +56,7 @@
         if(before){
             self.tedchildren.unshift(node);
         }else{
+            if(!self.tedchildren){ try{ throw new Error('yo'); }catch(e){ console.log(e.stack); } }
             self.tedchildren.push(node);
         }
         return self;
@@ -75,15 +76,18 @@
         var self = this;
         ancestors.shift(root.tedlabel);
         var siblings = new ShiftRegister(q);
+        if(!root.tedchildren) console.dir(root);
         if(root.tedchildren.length === 0){
             self.append(ancestors.concatenate(siblings));
         }else{
             var childs = root.tedchildren;
             for(var i=0; i<childs.length; i++){
                 var child = childs[i];
-                siblings.shift(child.tedlabel);
-                self.append(ancestors.concatenate(siblings));
-                self.profile(child, p, q, clone(ancestors));
+                if(!! child.tedlabel){
+                    siblings.shift(child.tedlabel);
+                    self.append(ancestors.concatenate(siblings));
+                    self.profile(child, p, q, clone(ancestors));
+                }
             }
             for(var j=0; j<q-1; j++){
                 siblings.shift("*");
