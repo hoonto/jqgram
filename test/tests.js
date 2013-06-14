@@ -51,32 +51,21 @@ function runProfileTests() {
     }
 
     for(var j=0; j<trees.length; j++){
-        if(!trees[j].tedchildren) console.log('WSTF!');
-        var blah = trees[j].tedchildren;
         profiles.push(new Profile(trees[j],p,q));
     }
 
     specify("Profile creation and equality", function(done) {
         this.timeout(1000*60*5);
         // Tests the creation of profiles against known profiles.
-        console.log('Profile Creation 1');
         var small_tree1_equality = checkProfileEquality(profiles[0], small_profile1);
-        console.log('Profile Creation 2');
         var small_tree2_equality = checkProfileEquality(profiles[1], small_profile2);
-        console.log('Profile Creation 3');
         var known_tree1_equality = checkProfileEquality(profiles[2], known_profile1);
-        console.log('Profile Creation 4');
         var known_tree2_equality = checkProfileEquality(profiles[3], known_profile2);
-        console.log('Profile Creation 5');
 
         assert.strictEqual(small_tree1_equality, true);
-        console.log('Profile Creation 6');
         assert.strictEqual(small_tree2_equality, true);
-        console.log('Profile Creation 7');
         assert.strictEqual(known_tree1_equality, true);
-        console.log('Profile Creation 8');
         assert.strictEqual(known_tree2_equality, true);
-        console.log('Profile Creation 9');
         
         done();
     });

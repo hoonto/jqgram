@@ -10,14 +10,17 @@ jqgram is currently used in applications in private beta at hoonto.com and clipw
 
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
+Note: If anyone can anyone tell me wtf is wrong with IE, I'll list you in the credits! (whoopie I know, but I'm a beggar).
 
 # Credits and Inspirations
 
 [The academic paper](http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf)
 
-[PyGram, python implementation](https://github.com/Sycondaman/PyGram), from which jqgram was originally ported and tests were faithfully recreated.
+[PyGram, python implementation](https://github.com/Sycondaman/PyGram), from which jqgram was originally ported and main tests were recreated.
 
 Includes slightly modified version of [node-clone](https://github.com/pvorb/node-clone). 
+
+Utilizes [setImmediate](https://github.com/NobleJS/setImmediate). 
 
 # Description
 
