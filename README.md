@@ -10,17 +10,7 @@ jqgram is currently used in applications in private beta at hoonto.com and clipw
 
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
-Note: If anyone can anyone tell me wtf is wrong with IE, I'll list you in the credits! (whoopie I know, but I'm a beggar).
-
-# Credits and Inspirations
-
-[The academic paper](http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf)
-
-[PyGram, python implementation](https://github.com/Sycondaman/PyGram), from which jqgram was originally ported and main tests were recreated.
-
-Includes slightly modified version of [node-clone](https://github.com/pvorb/node-clone). 
-
-Utilizes [setImmediate](https://github.com/NobleJS/setImmediate). 
+Note: If anyone can anyone tell me what is wrong with shift in IE, I'll list you in the credits! (whoopie I know, but I haven't the time at the moment to dig - will fix later).
 
 # Description
 
@@ -250,7 +240,15 @@ function(result) {
 // Output depends on how your pseudo-DOM subtree compares with the real DOM!
 ```
 
+# Credits and Inspirations
 
+[The academic paper](http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf)
+
+[PyGram, python implementation](https://github.com/Sycondaman/PyGram), from which jqgram was originally ported and main tests were recreated.
+
+Includes slightly modified version of [node-clone](https://github.com/pvorb/node-clone). 
+
+Utilizes [setImmediate](https://github.com/NobleJS/setImmediate). 
 
 # Tips 
 
