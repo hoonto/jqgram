@@ -38,17 +38,14 @@ In effect, this means that if the PQ-Gram distance between tree A and B is less 
 
 To use jqgram distance you need only create a jqgram object providing callbacks for label and children definition for trees being compared.  As the callbacks are per-tree, you can approximate edit distance between two different tree implementations.  For example, you could compare a tree generated from JSON with a DOM subtree.  You only need to pass in the root of each tree and the provided label and child callback functions will be used to generate the rest of the tree.  Another use case might be comparing an abstract syntax tree generated with Esprima with that created by Uglify2 or Acorn, or with something entirely of your own creation.  Note: default p and q are 2 and 3 respectively.
 
-(Note that jqgram uses the setimmediate module);
-
 ``` js
 npm install jqgram
 ```
 
-
 # Basic example
 
 ``` js
-var jq = require("../jqgram").jqgram;
+var jq = require("jqgram").jqgram;
 var root1 = {
     "thelabel": "a",
     "thekids": [
@@ -105,12 +102,12 @@ function(result) {
 // example of how to use tree edit distance in the browser.
 
 // jqgram:
-var jq = require("../jqgram").jqgram;
+var jq = require("jqgram").jqgram;
 
 // Make a DOM-ish structure out of objects:
 var mydom = {
     "name": "body",
-    "chittles": [ // http://www.urbandictionary.com/define.php?term=chittle
+    "chittles": [ 
         { "name": "div",
         "chittles": [
                 { "name": "a" }, // The id attribute
@@ -190,7 +187,7 @@ var cheerio = require('./lib/cheerio');
 var jq = require("../jqgram").jqgram;
 
 // Make a cheerio DOM:
-var html = "<body><div id="a"><div class="c d"><span>Irrelevent text</span></div></div></body>";
+var html = '<body><div id="a"><div class="c d"><span>Irrelevent text</span></div></div></body>';
 
 var cheeriodom = cheerio.load(html, {
     ignoreWhitespace: false,
