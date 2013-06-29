@@ -10,7 +10,11 @@ jqgram is currently used in applications in private beta at hoonto.com and clipw
 
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
-Note: If anyone can anyone tell me what is wrong with shift in IE, I'll list you in the credits! (whoopie I know, but I haven't the time at the moment to dig - will fix later).
+Note: IE is not passing tests according to testling, however I will dig into this at a later date, please let me know if this is critical for your application and enter an issue.
+
+Please also note that I am currently generating documentation so the project will be in a little bit of flux over the next couple days.
+
+Rgds....Hoonto/Matt
 
 # Description
 

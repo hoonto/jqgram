@@ -25,6 +25,17 @@ require("setimmediate");
 (function(exports, undefined){
     "use strict";
 
+    // # Node API
+    // Provides ability to create a raw node with no children, or a root node
+    // of a hierarchy from which a tree will be derived provided the label 
+    // and children callback functions, lfn and cfn respectively.
+    //
+    // To create a simple node with no children provide:
+    // label: a string label 
+    // To create a root node and children automatically provide:
+    // label: an object from which the root node of the tree will be derive.
+    // lfn: the label callback function, which must return a string label.
+    // cfn: the children callback function, which must return an array of children from which child nodes will be derived.  
     function Node(label, lfn, cfn){
         var self = this;
         if(!(self instanceof Node)){ return new Node(label, lfn, cfn); }
@@ -48,6 +59,7 @@ require("setimmediate");
             }
         }
     }
+    // 
     Node.prototype.addkid = function(node, before){
         var self = this;
         before = before || false;

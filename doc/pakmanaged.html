@@ -1,0 +1,584 @@
+<!DOCTYPE html><html lang="en"><head><title>pakmanaged</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="pakmanaged"><meta name="groc-project-path" content="pakmanaged.js"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">pakmanaged.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">global</span> <span class="o">=</span> <span class="nb">Function</span><span class="p">(</span><span class="s2">&quot;return this;&quot;</span><span class="p">)();</span>
+<span class="cm">/*!</span>
+<span class="cm">  * Ender: open module JavaScript framework (client-lib)</span>
+<span class="cm">  * copyright Dustin Diaz &amp; Jacob Thornton 2011 (@ded @fat)</span>
+<span class="cm">  * http://ender.no.de</span>
+<span class="cm">  * License MIT</span>
+<span class="cm">  */</span>
+<span class="o">!</span><span class="kd">function</span> <span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="a-global-object-for-nodejs-module-compatiblity">a global object for node.js module compatiblity</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper">  <span class="nx">context</span><span class="p">[</span><span class="s1">&#39;global&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">context</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Implements simple module system</p>
+
+<h1 id="losely-based-on-commonjs-modules-spec-v111">losely based on CommonJS Modules spec v1.1.1</h1></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">modules</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="p">,</span> <span class="nx">old</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">$</span>
+
+  <span class="kd">function</span> <span class="nx">require</span> <span class="p">(</span><span class="nx">identifier</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>modules can be required from ender's build system, or found on the window</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="nx">modules</span><span class="p">[</span><span class="nx">identifier</span><span class="p">]</span> <span class="o">||</span> <span class="nb">window</span><span class="p">[</span><span class="nx">identifier</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">module</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Requested module &#39;&quot;</span> <span class="o">+</span> <span class="nx">identifier</span> <span class="o">+</span> <span class="s2">&quot;&#39; has not been defined.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">module</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">provide</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">what</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">modules</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">what</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="nx">context</span><span class="p">[</span><span class="s1">&#39;provide&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">provide</span>
+  <span class="nx">context</span><span class="p">[</span><span class="s1">&#39;require&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">require</span>
+
+  <span class="kd">function</span> <span class="nx">aug</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">o2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="k">in</span> <span class="nx">o2</span><span class="p">)</span> <span class="nx">k</span> <span class="o">!=</span> <span class="s1">&#39;noConflict&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">k</span> <span class="o">!=</span> <span class="s1">&#39;_VERSION&#39;</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">o</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">=</span> <span class="nx">o2</span><span class="p">[</span><span class="nx">k</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nx">o</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">boosh</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">els</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>string || node || nodelist || window</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span> <span class="o">||</span> <span class="nx">s</span><span class="p">.</span><span class="nx">nodeName</span> <span class="o">||</span> <span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;item&#39;</span> <span class="k">in</span> <span class="nx">s</span><span class="p">)</span> <span class="o">||</span> <span class="nx">s</span> <span class="o">==</span> <span class="nb">window</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">els</span> <span class="o">=</span> <span class="nx">ender</span><span class="p">.</span><span class="nx">_select</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+      <span class="nx">els</span><span class="p">.</span><span class="nx">selector</span> <span class="o">=</span> <span class="nx">s</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="nx">els</span> <span class="o">=</span> <span class="nb">isFinite</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">?</span> <span class="nx">s</span> <span class="o">:</span> <span class="p">[</span><span class="nx">s</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nx">aug</span><span class="p">(</span><span class="nx">els</span><span class="p">,</span> <span class="nx">boosh</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">ender</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">boosh</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="nx">aug</span><span class="p">(</span><span class="nx">ender</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">_VERSION</span><span class="o">:</span> <span class="s1">&#39;0.3.6&#39;</span>
+    <span class="p">,</span> <span class="nx">fn</span><span class="o">:</span> <span class="nx">boosh</span> <span class="c1">// for easy compat to jQuery plugins</span>
+    <span class="p">,</span> <span class="nx">ender</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">chain</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">aug</span><span class="p">(</span><span class="nx">chain</span> <span class="o">?</span> <span class="nx">boosh</span> <span class="o">:</span> <span class="nx">ender</span><span class="p">,</span> <span class="nx">o</span><span class="p">)</span>
+      <span class="p">}</span>
+    <span class="p">,</span> <span class="nx">_select</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nx">r</span> <span class="o">||</span> <span class="nb">document</span><span class="p">).</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+      <span class="p">}</span>
+  <span class="p">})</span>
+
+  <span class="nx">aug</span><span class="p">(</span><span class="nx">boosh</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">forEach</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">scope</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>opt out of native forEach so we can intentionally call our own scope
+defaulting to the current item and be able to return self</p></div></div><div class="code"><div class="wrapper">      <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span> <span class="o">&amp;&amp;</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">scope</span> <span class="o">||</span> <span class="k">this</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="k">this</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">i</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>return self for chaining</p></div></div><div class="code"><div class="wrapper">      <span class="k">return</span> <span class="k">this</span>
+    <span class="p">},</span>
+    <span class="nx">$</span><span class="o">:</span> <span class="nx">ender</span> <span class="c1">// handy reference to self</span>
+  <span class="p">})</span>
+
+  <span class="nx">ender</span><span class="p">.</span><span class="nx">noConflict</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">context</span><span class="p">.</span><span class="nx">$</span> <span class="o">=</span> <span class="nx">old</span>
+    <span class="k">return</span> <span class="k">this</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">module</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">)</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ender</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>use subscript notation as extern for Closure compilation</p></div></div><div class="code"><div class="wrapper">  <span class="nx">context</span><span class="p">[</span><span class="s1">&#39;ender&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">context</span><span class="p">[</span><span class="s1">&#39;$&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">context</span><span class="p">[</span><span class="s1">&#39;ender&#39;</span><span class="p">]</span> <span class="o">||</span> <span class="nx">ender</span>
+
+<span class="p">}(</span><span class="k">this</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>pakmanager:setimmediate</p></div></div><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+  
+  <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">exports</span><span class="o">:</span> <span class="p">{}</span> <span class="p">},</span> <span class="nx">exports</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span>
+    <span class="p">,</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;ender&quot;</span><span class="p">)</span>
+    <span class="p">;</span>
+  
+  <span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">global</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+        <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    
+        <span class="kd">var</span> <span class="nx">tasks</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="kd">function</span> <span class="nx">Task</span><span class="p">(</span><span class="nx">handler</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="nx">handler</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">args</span> <span class="o">=</span> <span class="nx">args</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">Task</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">run</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>See steps in section 5 of the spec.</p></div></div><div class="code"><div class="wrapper">                <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">handler</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Choice of <code>thisArg</code> is not in the setImmediate spec; <code>undefined</code> is in the setTimeout spec though:
+http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html</p></div></div><div class="code"><div class="wrapper">                    <span class="k">this</span><span class="p">.</span><span class="nx">handler</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">args</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">scriptSource</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">handler</span><span class="p">;</span>
+                    <span class="cm">/*jshint evil: true */</span>
+                    <span class="nb">eval</span><span class="p">(</span><span class="nx">scriptSource</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">};</span>
+    
+            <span class="kd">var</span> <span class="nx">nextHandle</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// Spec says greater than zero</span>
+            <span class="kd">var</span> <span class="nx">tasksByHandle</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="kd">var</span> <span class="nx">currentlyRunningATask</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">addFromSetImmediateArguments</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">handler</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+                    <span class="kd">var</span> <span class="nx">argsToHandle</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">args</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                    <span class="kd">var</span> <span class="nx">task</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Task</span><span class="p">(</span><span class="nx">handler</span><span class="p">,</span> <span class="nx">argsToHandle</span><span class="p">);</span>
+    
+                    <span class="kd">var</span> <span class="nx">thisHandle</span> <span class="o">=</span> <span class="nx">nextHandle</span><span class="o">++</span><span class="p">;</span>
+                    <span class="nx">tasksByHandle</span><span class="p">[</span><span class="nx">thisHandle</span><span class="p">]</span> <span class="o">=</span> <span class="nx">task</span><span class="p">;</span>
+                    <span class="k">return</span> <span class="nx">thisHandle</span><span class="p">;</span>
+                <span class="p">},</span>
+                <span class="nx">runIfPresent</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">handle</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+So if we're currently running a task, we'll need to delay this invocation.</p></div></div><div class="code"><div class="wrapper">                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">currentlyRunningATask</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="kd">var</span> <span class="nx">task</span> <span class="o">=</span> <span class="nx">tasksByHandle</span><span class="p">[</span><span class="nx">handle</span><span class="p">];</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">task</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">currentlyRunningATask</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                            <span class="k">try</span> <span class="p">{</span>
+                                <span class="nx">task</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+                            <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+                                <span class="k">delete</span> <span class="nx">tasksByHandle</span><span class="p">[</span><span class="nx">handle</span><span class="p">];</span>
+                                <span class="nx">currentlyRunningATask</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+"too much recursion" error.</p></div></div><div class="code"><div class="wrapper">                        <span class="nx">global</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                            <span class="nx">tasks</span><span class="p">.</span><span class="nx">runIfPresent</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+                        <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="nx">remove</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">handle</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">delete</span> <span class="nx">tasksByHandle</span><span class="p">[</span><span class="nx">handle</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="p">}());</span>
+    
+        <span class="kd">function</span> <span class="nx">canUseNextTick</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Don't get fooled by e.g. browserify environments.</p></div></div><div class="code"><div class="wrapper">            <span class="k">return</span> <span class="k">typeof</span> <span class="nx">process</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span>
+                   <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">process</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;[object process]&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+    
+        <span class="kd">function</span> <span class="nx">canUseMessageChannel</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!!</span><span class="nx">global</span><span class="p">.</span><span class="nx">MessageChannel</span><span class="p">;</span>
+        <span class="p">}</span>
+    
+        <span class="kd">function</span> <span class="nx">canUsePostMessage</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>The test against <code>importScripts</code> prevents this implementation from being installed inside a web worker,
+where <code>global.postMessage</code> means something completely different and can't be used for this purpose.</p></div></div><div class="code"><div class="wrapper">    
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">global</span><span class="p">.</span><span class="nx">postMessage</span> <span class="o">||</span> <span class="nx">global</span><span class="p">.</span><span class="nx">importScripts</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="p">}</span>
+    
+            <span class="kd">var</span> <span class="nx">postMessageIsAsynchronous</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">oldOnMessage</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">onmessage</span><span class="p">;</span>
+            <span class="nx">global</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nx">postMessageIsAsynchronous</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="p">};</span>
+            <span class="nx">global</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">);</span>
+            <span class="nx">global</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="nx">oldOnMessage</span><span class="p">;</span>
+    
+            <span class="k">return</span> <span class="nx">postMessageIsAsynchronous</span><span class="p">;</span>
+        <span class="p">}</span>
+    
+        <span class="kd">function</span> <span class="nx">canUseReadyStateChange</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">&quot;document&quot;</span> <span class="k">in</span> <span class="nx">global</span> <span class="o">&amp;&amp;</span> <span class="s2">&quot;onreadystatechange&quot;</span> <span class="k">in</span> <span class="nx">global</span><span class="p">.</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    
+        <span class="kd">function</span> <span class="nx">installNextTickImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">attachTo</span><span class="p">.</span><span class="nx">setImmediate</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">tasks</span><span class="p">.</span><span class="nx">addFromSetImmediateArguments</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+    
+                <span class="nx">process</span><span class="p">.</span><span class="nx">nextTick</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">tasks</span><span class="p">.</span><span class="nx">runIfPresent</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+                <span class="p">});</span>
+    
+                <span class="k">return</span> <span class="nx">handle</span><span class="p">;</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
+    
+        <span class="kd">function</span> <span class="nx">installMessageChannelImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">channel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">global</span><span class="p">.</span><span class="nx">MessageChannel</span><span class="p">();</span>
+            <span class="nx">channel</span><span class="p">.</span><span class="nx">port1</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+                <span class="nx">tasks</span><span class="p">.</span><span class="nx">runIfPresent</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+            <span class="p">};</span>
+            <span class="nx">attachTo</span><span class="p">.</span><span class="nx">setImmediate</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">tasks</span><span class="p">.</span><span class="nx">addFromSetImmediateArguments</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+    
+                <span class="nx">channel</span><span class="p">.</span><span class="nx">port2</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+    
+                <span class="k">return</span> <span class="nx">handle</span><span class="p">;</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
+    
+        <span class="kd">function</span> <span class="nx">installPostMessageImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Installs an event handler on <code>global</code> for the <code>message</code> event: see
+* https://developer.mozilla.org/en/DOM/window.postMessage
+* http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages</p></div></div><div class="code"><div class="wrapper">    
+            <span class="kd">var</span> <span class="nx">MESSAGE_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;com.bn.NobleJS.setImmediate&quot;</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+    
+            <span class="kd">function</span> <span class="nx">isStringAndStartsWith</span><span class="p">(</span><span class="nx">string</span><span class="p">,</span> <span class="nx">putativeStart</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">typeof</span> <span class="nx">string</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">string</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">putativeStart</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">===</span> <span class="nx">putativeStart</span><span class="p">;</span>
+            <span class="p">}</span>
+    
+            <span class="kd">function</span> <span class="nx">onGlobalMessage</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>This will catch all incoming messages (even from other windows!), so we need to try reasonably hard to
+avoid letting anyone else trick us into firing off. We test the origin is still this window, and that a
+(randomly generated) unpredictable identifying prefix is present.</p></div></div><div class="code"><div class="wrapper">                <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">source</span> <span class="o">===</span> <span class="nx">global</span> <span class="o">&amp;&amp;</span> <span class="nx">isStringAndStartsWith</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">MESSAGE_PREFIX</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">MESSAGE_PREFIX</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+                    <span class="nx">tasks</span><span class="p">.</span><span class="nx">runIfPresent</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">global</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">,</span> <span class="nx">onGlobalMessage</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">global</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">(</span><span class="s2">&quot;onmessage&quot;</span><span class="p">,</span> <span class="nx">onGlobalMessage</span><span class="p">);</span>
+            <span class="p">}</span>
+    
+            <span class="nx">attachTo</span><span class="p">.</span><span class="nx">setImmediate</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">tasks</span><span class="p">.</span><span class="nx">addFromSetImmediateArguments</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Make <code>global</code> post a message to itself with the handle and identifying prefix, thus asynchronously
+invoking our onGlobalMessage listener above.</p></div></div><div class="code"><div class="wrapper">                <span class="nx">global</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">MESSAGE_PREFIX</span> <span class="o">+</span> <span class="nx">handle</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">);</span>
+    
+                <span class="k">return</span> <span class="nx">handle</span><span class="p">;</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
+    
+        <span class="kd">function</span> <span class="nx">installReadyStateChangeImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">attachTo</span><span class="p">.</span><span class="nx">setImmediate</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">tasks</span><span class="p">.</span><span class="nx">addFromSetImmediateArguments</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.</p></div></div><div class="code"><div class="wrapper">                <span class="kd">var</span> <span class="nx">scriptEl</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">);</span>
+                <span class="nx">scriptEl</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">tasks</span><span class="p">.</span><span class="nx">runIfPresent</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+    
+                    <span class="nx">scriptEl</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+                    <span class="nx">scriptEl</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">scriptEl</span><span class="p">);</span>
+                    <span class="nx">scriptEl</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+                <span class="p">};</span>
+                <span class="nx">global</span><span class="p">.</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">scriptEl</span><span class="p">);</span>
+    
+                <span class="k">return</span> <span class="nx">handle</span><span class="p">;</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
+    
+        <span class="kd">function</span> <span class="nx">installSetTimeoutImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">attachTo</span><span class="p">.</span><span class="nx">setImmediate</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">tasks</span><span class="p">.</span><span class="nx">addFromSetImmediateArguments</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+    
+                <span class="nx">global</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">tasks</span><span class="p">.</span><span class="nx">runIfPresent</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+                <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+    
+                <span class="k">return</span> <span class="nx">handle</span><span class="p">;</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
+    
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">global</span><span class="p">.</span><span class="nx">setImmediate</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.</p></div></div><div class="code"><div class="wrapper">            <span class="kd">var</span> <span class="nx">attachTo</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">getPrototypeOf</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="o">&amp;&amp;</span> <span class="s2">&quot;setTimeout&quot;</span> <span class="k">in</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">getPrototypeOf</span><span class="p">(</span><span class="nx">global</span><span class="p">)</span> <span class="o">?</span>
+                              <span class="nb">Object</span><span class="p">.</span><span class="nx">getPrototypeOf</span><span class="p">(</span><span class="nx">global</span><span class="p">)</span>
+                            <span class="o">:</span> <span class="nx">global</span><span class="p">;</span>
+    
+            <span class="k">if</span> <span class="p">(</span><span class="nx">canUseNextTick</span><span class="p">())</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>For Node.js before 0.9</p></div></div><div class="code"><div class="wrapper">                <span class="nx">installNextTickImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">canUsePostMessage</span><span class="p">())</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>For non-IE10 modern browsers</p></div></div><div class="code"><div class="wrapper">                <span class="nx">installPostMessageImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">canUseMessageChannel</span><span class="p">())</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>For web workers, where supported</p></div></div><div class="code"><div class="wrapper">                <span class="nx">installMessageChannelImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">canUseReadyStateChange</span><span class="p">())</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>For IE 6–8</p></div></div><div class="code"><div class="wrapper">                <span class="nx">installReadyStateChangeImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>For older browsers</p></div></div><div class="code"><div class="wrapper">                <span class="nx">installSetTimeoutImplementation</span><span class="p">(</span><span class="nx">attachTo</span><span class="p">);</span>
+            <span class="p">}</span>
+    
+            <span class="nx">attachTo</span><span class="p">.</span><span class="nx">clearImmediate</span> <span class="o">=</span> <span class="nx">tasks</span><span class="p">.</span><span class="nx">remove</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}(</span><span class="k">typeof</span> <span class="nx">global</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">global</span> <span class="o">?</span> <span class="nx">global</span> <span class="o">:</span> <span class="k">this</span><span class="p">));</span>
+    
+  <span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;setimmediate&quot;</span><span class="p">,</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">);</span>
+<span class="p">}(</span><span class="nx">global</span><span class="p">));</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>pakmanager:jqgram</p></div></div><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+  
+  <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">exports</span><span class="o">:</span> <span class="p">{}</span> <span class="p">},</span> <span class="nx">exports</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span>
+    <span class="p">,</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;ender&quot;</span><span class="p">)</span>
+    <span class="p">;</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">     * @License</span>
+<span class="cm">     * JQGram 0.2.0 &lt;http://hoonto.com/&gt;</span>
+<span class="cm">     * Copyright 2013 Hoonto &lt;http://hoonto.com/&gt;</span>
+<span class="cm">     * Available under MIT License</span>
+<span class="cm">     * Based on: </span>
+<span class="cm">     * Academic paper &lt;http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf&gt;</span>
+<span class="cm">     * PyGram implementation &lt;https://github.com/hoonto/jqgram&gt; </span>
+<span class="cm">     * with slightly modified node-clone &lt;https://github.com/pvorb/node-clone&gt; </span>
+<span class="cm">     */</span>
+    
+    <span class="cm">/**</span>
+<span class="cm">     * Node:</span>
+<span class="cm">     *</span>
+<span class="cm">     * var pygram = require(&#39;./pygram&#39;);</span>
+<span class="cm">     * pygram.distance</span>
+<span class="cm">     *</span>
+<span class="cm">     * Browser:</span>
+<span class="cm">     *</span>
+<span class="cm">     * &lt;script src=&quot;pygram.js&quot;&gt;&lt;/script&gt;</span>
+<span class="cm">     * &lt;script&gt;</span>
+<span class="cm">     *    alert(pygram.test());</span>
+<span class="cm">     * &lt;/script&gt;</span>
+<span class="cm">     */</span>
+    
+    <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;setimmediate&quot;</span><span class="p">);</span>
+    
+    <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">){</span>
+        <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    
+        <span class="kd">function</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Node</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">);</span> <span class="p">}</span>
+    
+            <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">label</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">label</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">tedlabel</span> <span class="o">=</span> <span class="nx">label</span><span class="p">;</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">label</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="o">!!</span> <span class="nx">lfn</span> <span class="o">&amp;&amp;</span> <span class="o">!!</span> <span class="nx">cfn</span><span class="p">){</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">tedlabel</span> <span class="o">=</span> <span class="nx">lfn</span><span class="p">(</span><span class="nx">label</span><span class="p">);</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span> <span class="o">=</span> <span class="p">[];</span>
+                <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">.</span><span class="nx">tedlabel</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
+                    <span class="kd">var</span> <span class="nx">kids</span> <span class="o">=</span> <span class="nx">cfn</span><span class="p">(</span><span class="nx">label</span><span class="p">);</span>
+                    <span class="k">if</span><span class="p">(</span><span class="o">!!</span> <span class="nx">kids</span><span class="p">){</span>
+                        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">kids</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+                            <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">kids</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span><span class="nx">lfn</span><span class="p">,</span><span class="nx">cfn</span><span class="p">);</span>
+                            <span class="k">if</span><span class="p">(</span><span class="o">!!</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="o">!!</span> <span class="nx">n</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">){</span>
+                                <span class="nx">self</span><span class="p">.</span><span class="nx">addkid</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">Node</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addkid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">before</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="nx">before</span> <span class="o">=</span> <span class="nx">before</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">before</span><span class="p">){</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">){</span> <span class="k">try</span><span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;yo&#39;</span><span class="p">);</span> <span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">stack</span><span class="p">);</span> <span class="p">}</span> <span class="p">}</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+        <span class="p">};</span>
+    
+        <span class="kd">function</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Profile</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">);</span> <span class="p">}</span>
+            <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">||</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="nx">q</span> <span class="o">=</span> <span class="nx">q</span> <span class="o">||</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">ancestors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">);</span>
+        <span class="p">}</span>
+    
+        <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">profile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="nx">ancestors</span><span class="p">.</span><span class="nx">shift</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">siblings</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">q</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">.</span><span class="nx">concatenate</span><span class="p">(</span><span class="nx">siblings</span><span class="p">));</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">childs</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">;</span>
+                <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">childs</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+                    <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="nx">childs</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+                    <span class="k">if</span><span class="p">(</span><span class="o">!!</span> <span class="nx">child</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">){</span>
+                        <span class="nx">siblings</span><span class="p">.</span><span class="nx">shift</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">);</span>
+                        <span class="nx">self</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">.</span><span class="nx">concatenate</span><span class="p">(</span><span class="nx">siblings</span><span class="p">));</span>
+                        <span class="nx">self</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">));</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">q</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span>
+                    <span class="nx">siblings</span><span class="p">.</span><span class="nx">shift</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">);</span>
+                    <span class="nx">self</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">.</span><span class="nx">concatenate</span><span class="p">(</span><span class="nx">siblings</span><span class="p">));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    
+        <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">union</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+            <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">other</span><span class="p">)</span> <span class="o">/</span> <span class="nx">union</span><span class="p">);</span>
+        <span class="p">};</span>
+    
+        <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">intersect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span><span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+                <span class="nx">intersect</span> <span class="o">+=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">gram_edit_distance</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">j</span><span class="p">]);</span>
+                <span class="kd">var</span> <span class="nx">listi</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">join</span><span class="p">();</span>
+                <span class="kd">var</span> <span class="nx">listj</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">join</span><span class="p">();</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">listi</span> <span class="o">===</span> <span class="nx">listj</span><span class="p">){</span>
+                    <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="nx">j</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">listi</span> <span class="o">&lt;</span> <span class="nx">listj</span><span class="p">){</span>
+                    <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                    <span class="nx">j</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">intersect</span><span class="p">;</span>
+        <span class="p">};</span>
+    
+        <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compare</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a1</span><span class="p">,</span><span class="nx">a2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">a1</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="nx">a2</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">a2</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//if (!self.compare(a1[i],a2[i])) return false;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">a1</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">a2</span><span class="p">[</span><span class="nx">i</span><span class="p">]){</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">};</span>
+    
+        <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">gram_edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span> <span class="nx">gram2</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">distance</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">compare</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span><span class="nx">gram2</span><span class="p">)){</span>
+                <span class="nx">distance</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">distance</span><span class="p">;</span>
+        <span class="p">};</span>
+    
+        <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+        <span class="p">};</span>
+    
+        <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prof</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">prof</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+                <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="k">return</span> <span class="nx">prof</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    
+        <span class="kd">function</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">ShiftRegister</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">size</span><span class="p">);</span> <span class="p">}</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">size</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    
+        <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">concatenate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="c1">//self.list(self.register);</span>
+            <span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="nx">temp</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">reg</span><span class="p">.</span><span class="nx">register</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">arr</span><span class="p">;</span>
+        <span class="p">};</span>
+    
+        <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">shift</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+        <span class="p">};</span>
+    
+        <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">reg</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+                <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="k">return</span> <span class="nx">reg</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    
+    
+    
+        <span class="c1">//////////////////////////////////////////////</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>node-clone provided by Paul Vorbach:</p></div></div><div class="code"><div class="wrapper">        <span class="c1">//</span>
+        <span class="c1">//Copyright © 2011-2013 Paul Vorbach</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p></div></div><div class="code"><div class="wrapper">        <span class="c1">//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</span>
+    
+        <span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">circular</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">circular</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+                <span class="nx">circular</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="p">}</span>
+    
+            <span class="kd">var</span> <span class="nx">useBuffer</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">Buffer</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">);</span>
+    
+            <span class="kd">var</span> <span class="nx">circularParent</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="kd">var</span> <span class="nx">circularResolved</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="kd">var</span> <span class="nx">circularReplace</span> <span class="o">=</span> <span class="p">[];</span>
+    
+            <span class="kd">function</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">cIndex</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span> <span class="c1">// Use local context within this function</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Deep clone all properties of parent into child</p></div></div><div class="code"><div class="wrapper">                <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">parent</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span> <span class="k">return</span> <span class="nx">parent</span><span class="p">;</span> <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Check for circular references</p></div></div><div class="code"><div class="wrapper">                    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">circularParent</span><span class="p">){</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">circularParent</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">parent</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>We found a circular reference</p></div></div><div class="code"><div class="wrapper">                            <span class="nx">circularReplace</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="s1">&#39;resolveTo&#39;</span><span class="o">:</span> <span class="nx">i</span><span class="p">,</span> <span class="s1">&#39;child&#39;</span><span class="o">:</span> <span class="nx">child</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="o">:</span> <span class="nx">cIndex</span><span class="p">});</span>
+                            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">//Just return null for now...</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>we will resolve circular references later</p></div></div><div class="code"><div class="wrapper">                        <span class="p">}</span>
+                    <span class="p">}</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Add to list of all parent objects</p></div></div><div class="code"><div class="wrapper">                    <span class="nx">circularParent</span><span class="p">[</span><span class="nx">context</span><span class="p">]</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Now continue cloning...</p></div></div><div class="code"><div class="wrapper">                    <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">parent</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="p">[];</span>
+                        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">){</span>
+                            <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">context</span> <span class="o">+</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span><span class="nx">parent</span><span class="p">)){</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">getTime</span><span class="p">());</span>
+                    <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isRegExp</span><span class="p">(</span><span class="nx">parent</span><span class="p">)){</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">source</span><span class="p">);</span>
+                    <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">useBuffer</span> <span class="o">&amp;&amp;</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">isBuffer</span><span class="p">(</span><span class="nx">parent</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+                        <span class="nx">parent</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">child</span><span class="p">);</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Also copy prototype over to new cloned object
+MLM: Not needed. </p></div></div><div class="code"><div class="wrapper">                        <span class="c1">//child.__proto__ = parent.__proto__;</span>
+                        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">){</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>MLM: don't clone on exception:</p></div></div><div class="code"><div class="wrapper">                            <span class="k">try</span><span class="p">{</span>
+                                <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">context</span> <span class="o">+</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+                            <span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Add to list of all cloned objects</p></div></div><div class="code"><div class="wrapper">                    <span class="nx">circularResolved</span><span class="p">[</span><span class="nx">context</span><span class="p">]</span> <span class="o">=</span> <span class="nx">child</span><span class="p">;</span>
+                <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">;</span> <span class="c1">//Just a simple shallow copy will do</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
+            <span class="p">}</span>
+    
+            <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">circular</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">cloned</span> <span class="o">=</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">);</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Now this object has been cloned. Let's check to see if there are any
+circular references for it</p></div></div><div class="code"><div class="wrapper">                <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">circularReplace</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">circularReplace</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="p">.</span><span class="nx">child</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="p">.</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">c</span><span class="p">.</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">c</span><span class="p">.</span><span class="nx">child</span><span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">circularResolved</span><span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">resolveTo</span><span class="p">];</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">cloned</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Deep clone all properties of parent into child</p></div></div><div class="code"><div class="wrapper">                <span class="kd">var</span> <span class="nx">child</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">parent</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
+                        <span class="k">return</span> <span class="nx">parent</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;Array&#39;</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="p">[];</span>
+                        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">){</span>
+                            <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">circular</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span><span class="nx">parent</span><span class="p">)){</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">getTime</span><span class="p">()</span> <span class="p">);</span>
+                    <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isRegExp</span><span class="p">(</span><span class="nx">parent</span><span class="p">)){</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">source</span><span class="p">);</span>
+                    <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+                        <span class="nx">child</span> <span class="o">=</span> <span class="p">{};</span>
+                        <span class="c1">//MLM: Not needed:</span>
+                        <span class="c1">//child.__proto__ = parent.__proto__;</span>
+                        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">){</span> 
+                            <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">circular</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span><span class="k">else</span><span class="p">{</span> 
+                    <span class="nx">child</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">;</span> <span class="c1">// Just a simple shallow clone will do</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    
+        <span class="kd">var</span> <span class="nx">objectToString</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span>
+        <span class="p">};</span>
+    
+        <span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">isArray</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ar</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">ar</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">ar</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">objectToString</span><span class="p">(</span><span class="nx">ar</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object Array]&#39;</span><span class="p">);</span>
+            <span class="p">},</span>
+            <span class="nx">isDate</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">typeof</span> <span class="nx">d</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">objectToString</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object Date]&#39;</span><span class="p">;</span>
+            <span class="p">},</span>
+            <span class="nx">isRegExp</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">re</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">typeof</span> <span class="nx">re</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">objectToString</span><span class="p">(</span><span class="nx">re</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object RegExp]&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    
+        <span class="kd">var</span> <span class="nx">setImmediate</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">setImmediate</span> <span class="o">?</span> <span class="nx">setImmediate</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">){</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span> <span class="p">};</span>
+    
+        <span class="nx">exports</span><span class="p">.</span><span class="nx">jqgram</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">distance</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roota</span><span class="p">,</span> <span class="nx">rootb</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span> <span class="o">||</span> <span class="mi">2</span><span class="p">;</span>
+                <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span> <span class="o">||</span> <span class="mi">3</span><span class="p">;</span>
+                <span class="nx">setImmediate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">nodea</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">roota</span><span class="p">.</span><span class="nx">root</span><span class="p">,</span><span class="nx">roota</span><span class="p">.</span><span class="nx">lfn</span><span class="p">,</span><span class="nx">roota</span><span class="p">.</span><span class="nx">cfn</span><span class="p">);</span>
+                    <span class="kd">var</span> <span class="nx">nodeb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">rootb</span><span class="p">.</span><span class="nx">root</span><span class="p">,</span><span class="nx">rootb</span><span class="p">.</span><span class="nx">lfn</span><span class="p">,</span><span class="nx">rootb</span><span class="p">.</span><span class="nx">cfn</span><span class="p">);</span>
+                    <span class="kd">var</span> <span class="nx">profa</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">nodea</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span><span class="p">);</span>
+                    <span class="kd">var</span> <span class="nx">profb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">nodeb</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span><span class="p">);</span>
+                    <span class="nx">cb</span><span class="p">({</span> <span class="s2">&quot;distance&quot;</span><span class="o">:</span> <span class="nx">profa</span><span class="p">.</span><span class="nx">edit_distance</span><span class="p">(</span><span class="nx">profb</span><span class="p">)</span> <span class="p">});</span>
+                <span class="p">});</span>
+            <span class="p">},</span>
+            <span class="nx">Node</span><span class="o">:</span> <span class="nx">Node</span><span class="p">,</span>
+            <span class="nx">Profile</span><span class="o">:</span> <span class="nx">Profile</span><span class="p">,</span>
+            <span class="nx">ShiftRegister</span><span class="o">:</span> <span class="nx">ShiftRegister</span>
+        <span class="p">};</span>
+    
+    
+    <span class="p">})(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">jqgram</span> <span class="o">=</span> <span class="p">{}</span> <span class="o">:</span> <span class="nx">exports</span><span class="p">);</span>
+    
+    
+    
+  <span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;jqgram&quot;</span><span class="p">,</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">);</span>
+<span class="p">}(</span><span class="nx">global</span><span class="p">));</span></div></div></div></div></body></html>
