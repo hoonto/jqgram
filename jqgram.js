@@ -76,6 +76,7 @@ require("setimmediate");
         return self;
     };
 
+    // # Profile
     function Profile(root, p, q){
         var self = this;
         if(!(self instanceof Profile)){ return new Profile(root, p, q); }
