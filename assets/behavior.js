@@ -121,6 +121,32 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "singleLineComment": ["//"],
           "name": "JavaScript"
         },
+        "sourcePath": "/node/hntofleet/dev/jqgram/lib/node.js",
+        "projectPath": "lib/node.js",
+        "targetPath": "node",
+        "firstHeader": {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "Node",
+            "slug": "node",
+            "isFileHeader": true
+          },
+          "depth": 1
+        },
+        "title": "Node"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "singleLineComment": ["//"],
+          "name": "JavaScript"
+        },
         "sourcePath": "/node/hntofleet/dev/jqgram/pakmanaged.js",
         "projectPath": "pakmanaged.js",
         "targetPath": "pakmanaged",
@@ -170,6 +196,58 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "depth": 1
         }
       ]
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "singleLineComment": ["//"],
+          "name": "JavaScript"
+        },
+        "sourcePath": "/node/hntofleet/dev/jqgram/lib/profile.js",
+        "projectPath": "lib/profile.js",
+        "targetPath": "profile",
+        "firstHeader": {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "Profile",
+            "slug": "profile",
+            "isFileHeader": true
+          },
+          "depth": 1
+        },
+        "title": "Profile"
+      },
+      "depth": 1,
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "node-clone provided by Paul Vorbach",
+            "slug": "node-clone-provided-by-paul-vorbach"
+          },
+          "depth": 1
+        }
+      ]
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "singleLineComment": ["//"],
+          "name": "JavaScript"
+        },
+        "sourcePath": "/node/hntofleet/dev/jqgram/lib/shiftregister.js",
+        "projectPath": "lib/shiftregister.js",
+        "targetPath": "shiftregister",
+        "title": "shiftregister"
+      },
+      "depth": 1,
+      "outline": []
     }
   ];
 
