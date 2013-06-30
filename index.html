@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><meta name="groc-github-url" content="https://github.com/hoonto/jqgram"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/hoonto/jqgram/blob/master/README.md">README.md</a></div></div><div id="document"><div class="segment"><div class="comments"><div class="wrapper"><h1 id="jqgram">jqgram</h1>
+
+<p>This module implements the PQ-Gram tree edit distance approximation algorithm for both server-side and browser-side applications; O(n log n) time and O(n) space performant where n is number of nodes in the trees.</p>
+
+<p>The PQ-Gram approximation is much faster than obtaining the true edit distance via Zhang &amp; Shasha, Klein, or Guha et. al, whom provide true edit distance algorithms that all perform minimum O(n<sup>2</sup>) time in O(n) space and are therefore unsuitable for many applications at scale.</p>
+
+<p>Often in real-world applications it is not necessary to know the true edit distance if a relative approximation of multiple trees to a known standard can be obtained.  Javascript, in the browser and now on the server with the advent of Node.js deal frequently with tree structures and end-user performance is usually critical in algorithm implementation and design; thus jqgram.</p>
+
+<p>jqgram is currently used in applications in private beta at hoonto.com and clipwidget.com. </p>
+
+<p><a href="http://hoonto.github.io/jqgram/jqgram.html">Documentation in progress</a></p>
+
+<p><a href="http://ci.testling.com/hoonto/jqgram"><img src="http://ci.testling.com/hoonto/jqgram.png" alt="browser support" title="" /></a></p>
+
+<p>Note: IE is not passing tests according to testling, however I will dig into this at a later date, please let me know if this is critical for your application and enter an issue.</p>
+
+<p>Please also note that I am currently generating documentation so the project will be in a little bit of flux over the next couple days.</p>
+
+<p>Rgds....Hoonto/Matt</p>
+
+<h1 id="description">Description</h1>
+
+<p>The jqgram API provides callbacks for node child and label determination in order to provide flexibility and applicability in Node and browser environments.  You may utilize your own tree structures or follow the DOM, cheerio, or basic object structure examples.</p>
+
+<p>The PQ-Gram edit distance is pseudo-metric:</p>
+
+<pre><code>1) Identity - edit_distance(a, a) = 0
+2) Symmetric - edit_distance(a, b) = edit_distance(b, a) 
+3) Triangle Inequality - edit_distance(a, b) + edit_distance(b, c) &gt;= edit_distance(a, c)
+</code></pre>
+
+<p>In effect, this means that if the PQ-Gram distance between tree A and B is less than the distance between tree C and D, then the true edit distance between A and B is less than or equal to the distance between C and D. Note that an edit distance of 0 does not mean the two trees are identical, only very similar.</p>
+
+<h1 id="usage">Usage</h1>
+
+<p>To use jqgram distance you need only create a jqgram object providing callbacks for label and children definition for trees being compared.  As the callbacks are per-tree, you can approximate edit distance between two different tree implementations.  For example, you could compare a tree generated from JSON with a DOM subtree.  You only need to pass in the root of each tree and the provided label and child callback functions will be used to generate the rest of the tree.  Another use case might be comparing an abstract syntax tree generated with Esprima with that created by Uglify2 or Acorn, or with something entirely of your own creation.  Note: default p and q are 2 and 3 respectively.</p>
+
+<pre><code class=" js">npm install jqgram
+</code></pre>
+
+<h1 id="basic-example">Basic example</h1>
+
+<pre><code class=" js">var jq = require("jqgram").jqgram;
+var root1 = {
+    "thelabel": "a",
+    "thekids": [
+        { "thelabel": "b",
+        "thekids": [
+                { "thelabel": "c" },
+                { "thelabel": "d" }
+            ]
+        },
+        { "thelabel": "e" },
+        { "thelabel": "f" }
+    ]
+}
+
+var root2 = {
+    "name": "a",
+    "kiddos": [
+        { "name": "b",
+        "kiddos": [
+                { "name": "c" },
+                { "name": "d" },
+                { "name": "y" }
+            ]
+        },
+        { "name": "e" },
+        { "name": "x" }
+    ]
+}
+
+jq.distance({
+    root: root1,
+    lfn: function(node){ return node.thelabel; },
+    cfn: function(node){ return node.thekids; }
+},{
+    root: root2,
+    lfn: function(node){ return node.name; },
+    cfn: function(node){ return node.kiddos; }
+},{ p:2, q:3, depth:10 },
+function(result) {
+    console.log(result.distance);
+});
+</code></pre>
+
+<hr />
+
+<pre><code>0.6428571428571428
+</code></pre>
+
+<h1 id="dom-vs-object">DOM vs Object</h1>
+
+<pre><code class=" js">// This could probably be optimized significantly, but is a real-world
+// example of how to use tree edit distance in the browser.
+
+// jqgram:
+var jq = require("jqgram").jqgram;
+
+// Make a DOM-ish structure out of objects:
+var mydom = {
+    "name": "body",
+    "chittles": [ 
+        { "name": "div",
+        "chittles": [
+                { "name": "a" }, // The id attribute
+                { "name": "div",
+                  "chittles": [
+                    { "name": "c" }, // The "c" class
+                    { "name": "d" }, // The "d" class
+                    { "name": "span" }
+                  ] 
+                }
+            ]
+        },
+    ]
+}
+
+// For ease, lets assume you have jQuery laoded:
+var realdom = $('body');
+
+// The lfn and cfn functions allow you to specify
+// how labels and children should be defined:
+jq.distance({
+    root: mydom,
+    lfn: function(node){ return node.name; },
+    cfn: function(node){ return  node.chittles; }
+},{
+    root: realdom,
+    lfn: function(node){ 
+        return node.nodeName.toLowerCase(); 
+    },
+    cfn: function(node){ 
+        var retarr = [];
+        if(!! node.attributes &amp;&amp; !! node.attributes.class &amp;&amp; !! node.attributes.class.nodeValue){
+            retarr = retarr.concat(node.attributes.class.nodeValue.split(' '));
+        }
+        if(!! node.attributes &amp;&amp; !! node.attributes.id &amp;&amp; !! node.attributes.id.nodeValue) {
+            retarr.push(node.attributes.id.nodeValue);
+        }
+        for(var i=0; i&lt;node.children.length; ++i){
+            retarr.push(node.children[i]);
+        }
+        return retarr;
+    }
+},{ p:2, q:3, depth:10 },
+function(result) {
+    console.log(result.distance);
+});
+</code></pre>
+
+<hr />
+
+<pre><code>// Output depends on how your pseudo-DOM subtree compares with the real DOM!
+</code></pre>
+
+<h1 id="dom-vs-cheerio-example">DOM vs Cheerio example</h1>
+
+<pre><code class=" js">// This could probably be optimized significantly, but is a real-world
+// example of how to use tree edit distance in the browser.
+
+// For cheerio, you'll have to browserify, 
+// which requires some fiddling around
+// due to cheerio's dynamically generated 
+// require's (good grief) that browserify 
+// does not see due to the static nature 
+// of its code analysis (dynamic off-line
+// analysis is hard, but doable).
+//
+// Ultimately, the goal is to end up with 
+// something like this in the browser:
+
+var cheerio = require('./lib/cheerio'); 
+
+// The easy part, jqgram:
+var jq = require("../jqgram").jqgram;
+
+// Make a cheerio DOM:
+var html = '&lt;body&gt;&lt;div id="a"&gt;&lt;div class="c d"&gt;&lt;span&gt;Irrelevent text&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;';
+
+var cheeriodom = cheerio.load(html, {
+    ignoreWhitespace: false,
+    lowerCaseTags: true
+});
+
+// For ease, lets assume you have jQuery laoded:
+var realdom = $('body');
+
+// The lfn and cfn functions allow you to specify
+// how labels and children should be defined:
+jq.distance({
+    root: cheeriodom,
+    lfn: function(node){ 
+        // We don't have to lowercase this because we already
+        // asked cheerio to do that for us above (lowerCaseTags).
+        return node.name; 
+    },
+    cfn: function(node){ 
+        // Cheerio maintains attributes in the attribs array:
+        // We're going to put id's and classes in as children 
+        // of nodes in our cheerio tree
+        var retarr = []; 
+        if(!! node.attribs &amp;&amp; !! node.attribs.class){
+            retarr = retarr.concat(node.attribs.class.split(' '));
+        }
+        if(!! node.attribs &amp;&amp; !! node.attribs.id){
+            retarr.push(node.attribs.id);
+        }
+        retarr = retarr.concat(node.children);
+        return  retarr;
+    }
+},{
+    root: realdom,
+    lfn: function(node){ 
+        return node.nodeName.toLowerCase(); 
+    },
+    cfn: function(node){ 
+        var retarr = [];
+        if(!! node.attributes &amp;&amp; !! node.attributes.class &amp;&amp; !! node.attributes.class.nodeValue){
+            retarr = retarr.concat(node.attributes.class.nodeValue.split(' '));
+        }
+        if(!! node.attributes &amp;&amp; !! node.attributes.id &amp;&amp; !! node.attributes.id.nodeValue) {
+            retarr.push(node.attributes.id.nodeValue);
+        }
+        for(var i=0; i&lt;node.children.length; ++i){
+            retarr.push(node.children[i]);
+        }
+        return retarr;
+    }
+},{ p:2, q:3, depth:10 },
+function(result) {
+    console.log(result.distance);
+});
+</code></pre>
+
+<hr />
+
+<pre><code>// Output depends on how your pseudo-DOM subtree compares with the real DOM!
+</code></pre>
+
+<h1 id="credits-and-inspirations">Credits and Inspirations</h1>
+
+<p><a href="http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf">The academic paper</a></p>
+
+<p><a href="https://github.com/Sycondaman/PyGram">PyGram, python implementation</a>, from which jqgram was originally ported and main tests were recreated.</p>
+
+<p>Includes slightly modified version of <a href="https://github.com/pvorb/node-clone">node-clone</a>. </p>
+
+<p>Utilizes <a href="https://github.com/NobleJS/setImmediate">setImmediate</a>. </p>
+
+<h1 id="tips">Tips</h1>
+
+<p>1)  The p and q values will change the distribution of the edit distance, which is a value between 0 and 1. In practice, you will likely not need to modify these.  Read the <a href="http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf">the paper</a> referenced in the credits section above for more info on that.</p>
+
+<p>2)  Node labels are compared lexicographically. Whenever node labels are overly descriptive, performance and accuracy of the algorithm can be increased dramatically by expanding node labels as new children.  In jqgram you can do this in your child callback function for each tree as shown in examples - for example using the id and each class name in the class attributes of DOM nodes as additional immediate children of the current node. </p></div></div></div></div></body></html>
