@@ -9,23 +9,14 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       "type": "file",
       "data": {
         "language": {
-          "nameMatchers": [".md"],
-          "commentsOnly": true,
-          "name": "Markdown"
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "singleLineComment": ["//"],
+          "name": "JavaScript"
         },
-        "sourcePath": "/node/hntofleet/dev/jqgram/README.md",
-        "projectPath": "README.md",
-        "targetPath": "index",
-        "firstHeader": {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "jqgram",
-            "slug": "jqgram",
-            "isFileHeader": true
-          },
-          "depth": 1
-        },
+        "sourcePath": "/node/hntofleet/dev/jqgram/jqgram.js",
+        "projectPath": "jqgram.js",
+        "targetPath": "jqgram",
         "title": "jqgram"
       },
       "depth": 1,
@@ -34,56 +25,50 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "Description",
-            "slug": "description"
+            "title": "Node API",
+            "slug": "node-api"
           },
           "depth": 1
         }, {
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "Usage",
-            "slug": "usage"
+            "title": "Profile",
+            "slug": "profile"
+          },
+          "depth": 1
+        }
+      ]
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "singleLineComment": ["//"],
+          "name": "JavaScript"
+        },
+        "sourcePath": "/node/hntofleet/dev/jqgram/pakmanaged.js",
+        "projectPath": "pakmanaged.js",
+        "targetPath": "pakmanaged",
+        "title": "pakmanaged"
+      },
+      "depth": 1,
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "a global object for node.js module compatiblity",
+            "slug": "a-global-object-for-nodejs-module-compatiblity"
           },
           "depth": 1
         }, {
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "Basic example",
-            "slug": "basic-example"
-          },
-          "depth": 1
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "DOM vs Object",
-            "slug": "dom-vs-object"
-          },
-          "depth": 1
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "DOM vs Cheerio example",
-            "slug": "dom-vs-cheerio-example"
-          },
-          "depth": 1
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "Credits and Inspirations",
-            "slug": "credits-and-inspirations"
-          },
-          "depth": 1
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "Tips",
-            "slug": "tips"
+            "title": "losely based on CommonJS Modules spec v1.1.1",
+            "slug": "losely-based-on-commonjs-modules-spec-v111"
           },
           "depth": 1
         }
