@@ -2,6 +2,7 @@
 require("setimmediate");
 var Node = require("./lib/node.js");
 var Profile = require("./lib/profile.js");
+var ShiftRegister = require("./lib/shiftregister.js");
 
 (function(exports, undefined){
 
@@ -20,7 +21,8 @@ var Profile = require("./lib/profile.js");
             });
         },
         Node: Node,
-        Profile: Profile
+        Profile: Profile,
+        ShiftRegister: ShiftRegister
     };
 
 

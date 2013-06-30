@@ -2,7 +2,7 @@
 /*global jqgram: false, clearImmediate: false, specify: false, window: false */
 
 var assert = require("assert");
-var jqgram = require("../jqgram").jqgram;
+var jqgram = require("../index.js").jqgram;
 var kcombo = require('./kcombinations').combos.k_combinations;
 
 var Node = jqgram.Node;
