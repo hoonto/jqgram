@@ -20,11 +20,15 @@ require("setimmediate");
     // and children callback functions, lfn and cfn respectively.
     //
     // To create a simple Node with no children provide:
+    
     // * label: a **string** label 
-    //
+    
     // To create a root Node and children automatically provide:
+    
     // * label: an **object** from which the root node of the tree will be derive.
+    
     // * lfn: the label callback function, which must return a string label.
+     
     // * cfn: the children callback function, which must return an array of children from which child nodes will be derived.  
     
     function Node(label, lfn, cfn){
