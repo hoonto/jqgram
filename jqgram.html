@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="en"><head><title>jqgram</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="jqgram"><meta name="groc-project-path" content="jqgram.js"><meta name="groc-github-url" content="https://github.com/hoonto/jqgram"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/hoonto/jqgram/blob/master/jqgram.js">jqgram.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="cm">/**</span>
+<span class="cm"> * @License</span>
+<span class="cm"> * JQGram 0.2.0 &lt;http://hoonto.com/&gt;</span>
+<span class="cm"> * Copyright 2013 Hoonto &lt;http://hoonto.com/&gt;</span>
+<span class="cm"> * Available under MIT License</span>
+<span class="cm"> * Based on: </span>
+<span class="cm"> * Academic paper &lt;http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf&gt;</span>
+<span class="cm"> * PyGram implementation &lt;https://github.com/hoonto/jqgram&gt; </span>
+<span class="cm"> * with slightly modified node-clone &lt;https://github.com/pvorb/node-clone&gt; </span>
+<span class="cm"> */</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Node:</span>
+<span class="cm"> *</span>
+<span class="cm"> * var pygram = require(&#39;jqgram&#39;);</span>
+<span class="cm"> *</span>
+<span class="cm"> * Browser:</span>
+<span class="cm"> *</span>
+<span class="cm"> * &lt;script src=&quot;setimmediate.js&quot;&gt;&lt;/script&gt;</span>
+<span class="cm"> * &lt;script src=&quot;jqgram.js&quot;&gt;&lt;/script&gt;</span>
+<span class="cm"> */</span>
+
+<span class="nx">require</span><span class="p">(</span><span class="s2">&quot;setimmediate&quot;</span><span class="p">);</span>
+
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">){</span>
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node-api">Node API</h1>
+
+<p>Provides ability to create a raw node with no children, or a root node
+of a hierarchy from which a tree will be derived provided the label 
+and children callback functions, lfn and cfn respectively.</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a simple node with no children provide:
+label: a string label 
+To create a root node and children automatically provide:
+label: an object from which the root node of the tree will be derive.
+lfn: the label callback function, which must return a string label.
+cfn: the children callback function, which must return an array of children from which child nodes will be derived.  </p></div></div><div class="code"><div class="wrapper">    <span class="kd">function</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Node</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">);</span> <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">label</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">label</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">tedlabel</span> <span class="o">=</span> <span class="nx">label</span><span class="p">;</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">label</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="o">!!</span> <span class="nx">lfn</span> <span class="o">&amp;&amp;</span> <span class="o">!!</span> <span class="nx">cfn</span><span class="p">){</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">tedlabel</span> <span class="o">=</span> <span class="nx">lfn</span><span class="p">(</span><span class="nx">label</span><span class="p">);</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">.</span><span class="nx">tedlabel</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
+                <span class="kd">var</span> <span class="nx">kids</span> <span class="o">=</span> <span class="nx">cfn</span><span class="p">(</span><span class="nx">label</span><span class="p">);</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!!</span> <span class="nx">kids</span><span class="p">){</span>
+                    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">kids</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+                        <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">kids</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span><span class="nx">lfn</span><span class="p">,</span><span class="nx">cfn</span><span class="p">);</span>
+                        <span class="k">if</span><span class="p">(</span><span class="o">!!</span> <span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="o">!!</span> <span class="nx">n</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">){</span>
+                            <span class="nx">self</span><span class="p">.</span><span class="nx">addkid</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>addkid
+Create a node and add it as a child to an existing node or to a basic node created with only a string label.</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>node: The parent Node.
+before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">Node</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addkid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">before</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">before</span> <span class="o">=</span> <span class="nx">before</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">before</span><span class="p">){</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">){</span> <span class="k">try</span><span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;yo&#39;</span><span class="p">);</span> <span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">stack</span><span class="p">);</span> <span class="p">}</span> <span class="p">}</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="kd">function</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Profile</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">);</span> <span class="p">}</span>
+        <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">||</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="nx">q</span> <span class="o">=</span> <span class="nx">q</span> <span class="o">||</span> <span class="mi">3</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ancestors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">profile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">ancestors</span><span class="p">.</span><span class="nx">shift</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">siblings</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">q</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">.</span><span class="nx">concatenate</span><span class="p">(</span><span class="nx">siblings</span><span class="p">));</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">childs</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">childs</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+                <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="nx">childs</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!!</span> <span class="nx">child</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">){</span>
+                    <span class="nx">siblings</span><span class="p">.</span><span class="nx">shift</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">);</span>
+                    <span class="nx">self</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">.</span><span class="nx">concatenate</span><span class="p">(</span><span class="nx">siblings</span><span class="p">));</span>
+                    <span class="nx">self</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">q</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span>
+                <span class="nx">siblings</span><span class="p">.</span><span class="nx">shift</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">);</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">.</span><span class="nx">concatenate</span><span class="p">(</span><span class="nx">siblings</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">union</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">other</span><span class="p">)</span> <span class="o">/</span> <span class="nx">union</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">intersect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+            <span class="nx">intersect</span> <span class="o">+=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">gram_edit_distance</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">j</span><span class="p">]);</span>
+            <span class="kd">var</span> <span class="nx">listi</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">join</span><span class="p">();</span>
+            <span class="kd">var</span> <span class="nx">listj</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">join</span><span class="p">();</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">listi</span> <span class="o">===</span> <span class="nx">listj</span><span class="p">){</span>
+                <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="nx">j</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">listi</span> <span class="o">&lt;</span> <span class="nx">listj</span><span class="p">){</span>
+                <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="nx">j</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">intersect</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compare</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a1</span><span class="p">,</span><span class="nx">a2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">a1</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="nx">a2</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">a2</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//if (!self.compare(a1[i],a2[i])) return false;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">a1</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">a2</span><span class="p">[</span><span class="nx">i</span><span class="p">]){</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">gram_edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span> <span class="nx">gram2</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">distance</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">compare</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span><span class="nx">gram2</span><span class="p">)){</span>
+            <span class="nx">distance</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">distance</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prof</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">prof</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+            <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span> <span class="nx">prof</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="kd">function</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">ShiftRegister</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">size</span><span class="p">);</span> <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">size</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">concatenate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="c1">//self.list(self.register);</span>
+        <span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="nx">temp</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">reg</span><span class="p">.</span><span class="nx">register</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">arr</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">shift</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">reg</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+            <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span> <span class="nx">reg</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+
+    <span class="c1">//////////////////////////////////////////////</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>node-clone provided by Paul Vorbach:</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span>
+    <span class="c1">//Copyright © 2011-2013 Paul Vorbach</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</span>
+
+    <span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">circular</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">circular</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
+            <span class="nx">circular</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kd">var</span> <span class="nx">useBuffer</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">Buffer</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">);</span>
+
+        <span class="kd">var</span> <span class="nx">circularParent</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="kd">var</span> <span class="nx">circularResolved</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="kd">var</span> <span class="nx">circularReplace</span> <span class="o">=</span> <span class="p">[];</span>
+
+        <span class="kd">function</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">cIndex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span> <span class="c1">// Use local context within this function</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Deep clone all properties of parent into child</p></div></div><div class="code"><div class="wrapper">            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">parent</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span> <span class="k">return</span> <span class="nx">parent</span><span class="p">;</span> <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Check for circular references</p></div></div><div class="code"><div class="wrapper">                <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">circularParent</span><span class="p">){</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">circularParent</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">parent</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>We found a circular reference</p></div></div><div class="code"><div class="wrapper">                        <span class="nx">circularReplace</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="s1">&#39;resolveTo&#39;</span><span class="o">:</span> <span class="nx">i</span><span class="p">,</span> <span class="s1">&#39;child&#39;</span><span class="o">:</span> <span class="nx">child</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="o">:</span> <span class="nx">cIndex</span><span class="p">});</span>
+                        <span class="k">return</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">//Just return null for now...</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>we will resolve circular references later</p></div></div><div class="code"><div class="wrapper">                    <span class="p">}</span>
+                <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Add to list of all parent objects</p></div></div><div class="code"><div class="wrapper">                <span class="nx">circularParent</span><span class="p">[</span><span class="nx">context</span><span class="p">]</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Now continue cloning...</p></div></div><div class="code"><div class="wrapper">                <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">parent</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="p">[];</span>
+                    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">){</span>
+                        <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">context</span> <span class="o">+</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span><span class="nx">parent</span><span class="p">)){</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">getTime</span><span class="p">());</span>
+                <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isRegExp</span><span class="p">(</span><span class="nx">parent</span><span class="p">)){</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">source</span><span class="p">);</span>
+                <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">useBuffer</span> <span class="o">&amp;&amp;</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">isBuffer</span><span class="p">(</span><span class="nx">parent</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+                    <span class="nx">parent</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">child</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Also copy prototype over to new cloned object
+MLM: Not needed. </p></div></div><div class="code"><div class="wrapper">                    <span class="c1">//child.__proto__ = parent.__proto__;</span>
+                    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">){</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>MLM: don't clone on exception:</p></div></div><div class="code"><div class="wrapper">                        <span class="k">try</span><span class="p">{</span>
+                            <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">context</span> <span class="o">+</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+                        <span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Add to list of all cloned objects</p></div></div><div class="code"><div class="wrapper">                <span class="nx">circularResolved</span><span class="p">[</span><span class="nx">context</span><span class="p">]</span> <span class="o">=</span> <span class="nx">child</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="nx">child</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">;</span> <span class="c1">//Just a simple shallow copy will do</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">circular</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">cloned</span> <span class="o">=</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Now this object has been cloned. Let's check to see if there are any
+circular references for it</p></div></div><div class="code"><div class="wrapper">            <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">circularReplace</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">circularReplace</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="p">.</span><span class="nx">child</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="p">.</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">c</span><span class="p">.</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">c</span><span class="p">.</span><span class="nx">child</span><span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">circularResolved</span><span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">resolveTo</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">cloned</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Deep clone all properties of parent into child</p></div></div><div class="code"><div class="wrapper">            <span class="kd">var</span> <span class="nx">child</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">parent</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
+                    <span class="k">return</span> <span class="nx">parent</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;Array&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="p">[];</span>
+                    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">){</span>
+                        <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">circular</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span><span class="nx">parent</span><span class="p">)){</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">getTime</span><span class="p">()</span> <span class="p">);</span>
+                <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">isRegExp</span><span class="p">(</span><span class="nx">parent</span><span class="p">)){</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">source</span><span class="p">);</span>
+                <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="p">{};</span>
+                    <span class="c1">//MLM: Not needed:</span>
+                    <span class="c1">//child.__proto__ = parent.__proto__;</span>
+                    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">){</span> 
+                        <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">circular</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span> 
+                <span class="nx">child</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">;</span> <span class="c1">// Just a simple shallow clone will do</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">objectToString</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">isArray</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ar</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">ar</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">ar</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">objectToString</span><span class="p">(</span><span class="nx">ar</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object Array]&#39;</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="nx">isDate</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">typeof</span> <span class="nx">d</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">objectToString</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object Date]&#39;</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="nx">isRegExp</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">re</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">typeof</span> <span class="nx">re</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">objectToString</span><span class="p">(</span><span class="nx">re</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object RegExp]&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="kd">var</span> <span class="nx">setImmediate</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">setImmediate</span> <span class="o">?</span> <span class="nx">setImmediate</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">){</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span> <span class="p">};</span>
+
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">jqgram</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">distance</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roota</span><span class="p">,</span> <span class="nx">rootb</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span> <span class="o">||</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span> <span class="o">||</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="nx">setImmediate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">nodea</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">roota</span><span class="p">.</span><span class="nx">root</span><span class="p">,</span><span class="nx">roota</span><span class="p">.</span><span class="nx">lfn</span><span class="p">,</span><span class="nx">roota</span><span class="p">.</span><span class="nx">cfn</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">nodeb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">rootb</span><span class="p">.</span><span class="nx">root</span><span class="p">,</span><span class="nx">rootb</span><span class="p">.</span><span class="nx">lfn</span><span class="p">,</span><span class="nx">rootb</span><span class="p">.</span><span class="nx">cfn</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">profa</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">nodea</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">profb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">nodeb</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span><span class="p">);</span>
+                <span class="nx">cb</span><span class="p">({</span> <span class="s2">&quot;distance&quot;</span><span class="o">:</span> <span class="nx">profa</span><span class="p">.</span><span class="nx">edit_distance</span><span class="p">(</span><span class="nx">profb</span><span class="p">)</span> <span class="p">});</span>
+            <span class="p">});</span>
+        <span class="p">},</span>
+        <span class="nx">Node</span><span class="o">:</span> <span class="nx">Node</span><span class="p">,</span>
+        <span class="nx">Profile</span><span class="o">:</span> <span class="nx">Profile</span><span class="p">,</span>
+        <span class="nx">ShiftRegister</span><span class="o">:</span> <span class="nx">ShiftRegister</span>
+    <span class="p">};</span>
+
+
+<span class="p">})(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">jqgram</span> <span class="o">=</span> <span class="p">{}</span> <span class="o">:</span> <span class="nx">exports</span><span class="p">);</span></div></div></div></div></body></html>
