@@ -41,12 +41,49 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "slug": "node",
             "isFileHeader": true
           },
-          "depth": 1
+          "depth": 1,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Node Constructor",
+                "slug": "node-constructor"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Node.addkid",
+                "slug": "nodeaddkid"
+              },
+              "depth": 2
+            }
+          ]
         },
         "title": "Node"
       },
       "depth": 1,
-      "outline": []
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Node Constructor",
+            "slug": "node-constructor"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Node.addkid",
+            "slug": "nodeaddkid"
+          },
+          "depth": 2
+        }
+      ]
     }, {
       "type": "file",
       "data": {

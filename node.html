@@ -1,7 +1,12 @@
-<!DOCTYPE html><html lang="en"><head><title>node</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="node"><meta name="groc-project-path" content="lib/node.js"><meta name="groc-github-url" content="https://github.com/hoonto/jqgram"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/hoonto/jqgram/blob/master/lib/node.js">lib/node.js</a></div></div><div id="document"><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node">Node</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Provides ability to create a raw node with no children, or a root node
+<!DOCTYPE html><html lang="en"><head><title>node</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="node"><meta name="groc-project-path" content="lib/node.js"><meta name="groc-github-url" content="https://github.com/hoonto/jqgram"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/hoonto/jqgram/blob/master/lib/node.js">lib/node.js</a></div></div><div id="document"><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node">Node</h1>
+
+<p>Provides ability to create a raw node with no children, or a root node
 of a hierarchy from which a tree will be derived provided the label 
-and children callback functions, lfn and cfn respectively.</p></div></div><div class="code"><div class="wrapper"><span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a simple Node with no children provide
-* label: a string label </p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Node</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+and children callback functions, lfn and cfn respectively.
+To create a simple Node with no children provide
+* label: a string label </p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Node</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="node-constructor">Node Constructor</h2>
+
+<ul>
 <li>label: a string for simple Node with no children, an object from which the root node of the tree will be derived provided lfn and cfn label and callbacck functions provided.</li>
 <li>lfn: the label callback function, which must return a string label.  Ignored if label is a string</li>
 <li>cfn: the children callback function, which must return an array of children from which child nodes will be derived.  Ignored if label is a string. </li>
@@ -27,8 +32,10 @@ and children callback functions, lfn and cfn respectively.</p></div></div><div c
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
-<span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Node.addkid
-Create a node and add it as a child to an existing node or to a basic node created with only a string label.</p></div></div><div class="code"><div class="wrapper"><span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>node: The parent Node.
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="nodeaddkid">Node.addkid</h2>
+
+<p>Create a node and add it as a child to an existing node or to a basic node created with only a string label.
+node: The parent Node.
 before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append.</p></div></div><div class="code"><div class="wrapper"><span class="nx">Node</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addkid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">before</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="nx">before</span> <span class="o">=</span> <span class="nx">before</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
