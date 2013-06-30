@@ -1,5 +1,4 @@
-//
-// @License
+// # License
 // JQGram 0.2.0 <http://hoonto.com/>
 // Copyright 2013 Hoonto <http://hoonto.com/>
 // Available under MIT License
@@ -14,18 +13,19 @@ require("setimmediate");
 (function(exports, undefined){
     "use strict";
 
-    // # # Node API
+    // # Node
+    //
     // Provides ability to create a raw node with no children, or a root node
     // of a hierarchy from which a tree will be derived provided the label 
     // and children callback functions, lfn and cfn respectively.
     //
     // To create a simple Node with no children provide:
-    // * **label**: a **string** label 
+    // * label: a **string** label 
     //
     // To create a root Node and children automatically provide:
-    // * **label**: an **object** from which the root node of the tree will be derive.
-    // * **lfn**: the label callback function, which must return a string label.
-    // * **cfn**: the children callback function, which must return an array of children from which child nodes will be derived.  
+    // * label: an **object** from which the root node of the tree will be derive.
+    // * lfn: the label callback function, which must return a string label.
+    // * cfn: the children callback function, which must return an array of children from which child nodes will be derived.  
     
     function Node(label, lfn, cfn){
         var self = this;
@@ -50,7 +50,7 @@ require("setimmediate");
             }
         }
     }
-    // addkid
+    // Node.addkid
     // Create a node and add it as a child to an existing node or to a basic node created with only a string label.
     //
     // node: The parent Node.
@@ -81,7 +81,7 @@ require("setimmediate");
         self.profile(root, p, q, ancestors);
     }
 
-    // profile method, utilizing root, p, q, and ancestors
+    // Profile.profile method, utilizing root, p, q, and ancestors
     Profile.prototype.profile = function(root, p, q, ancestors){
         var self = this;
         ancestors.shift(root.tedlabel);
