@@ -14,7 +14,8 @@
     },
     "main": "jqgram.js",
     "dependencies" : {
-        "setimmediate": "~1.0.1"
+        "setimmediate": "~1.0.1",
+        "node-clone": "~0.1.1"
     },
     "devDependencies" : {
         "jshint": "~1.1",
