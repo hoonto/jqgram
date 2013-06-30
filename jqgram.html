@@ -13,11 +13,15 @@ with slightly modified node-clone <a href="https://github.com/pvorb/node-clone">
 <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">){</span>
     <span class="s2">&quot;use strict&quot;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node">Node</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Provides ability to create a raw node with no children, or a root node
 of a hierarchy from which a tree will be derived provided the label 
-and children callback functions, lfn and cfn respectively.</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a simple Node with no children provide:
-* label: a <strong>string</strong> label </p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a root Node and children automatically provide:
-* label: an <strong>object</strong> from which the root node of the tree will be derive.
-* lfn: the label callback function, which must return a string label.
-* cfn: the children callback function, which must return an array of children from which child nodes will be derived.  </p></div></div><div class="code"><div class="wrapper">    
+and children callback functions, lfn and cfn respectively.</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a simple Node with no children provide:</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>label: a <strong>string</strong> label </li>
+</ul></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a root Node and children automatically provide:</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>label: an <strong>object</strong> from which the root node of the tree will be derive.</li>
+</ul></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>lfn: the label callback function, which must return a string label.</li>
+</ul></div></div><div class="code"><div class="wrapper">     </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>cfn: the children callback function, which must return an array of children from which child nodes will be derived.  </li>
+</ul></div></div><div class="code"><div class="wrapper">    
     <span class="kd">function</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Node</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">);</span> <span class="p">}</span>
