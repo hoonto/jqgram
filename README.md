@@ -262,3 +262,12 @@ Utilizes [setImmediate](https://github.com/NobleJS/setImmediate).
 
 2)  Node labels are compared lexicographically. Whenever node labels are overly descriptive, performance and accuracy of the algorithm can be increased dramatically by expanding node labels as new children.  In jqgram you can do this in your child callback function for each tree as shown in examples - for example using the id and each class name in the class attributes of DOM nodes as additional immediate children of the current node. 
 
+# License
+JQGram 0.2.0 <http://hoonto.com/>
+Copyright 2013 Hoonto <http://hoonto.com/>
+Available under MIT License
+Based on:
+Academic paper <http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf>
+PyGram implementation <https://github.com/hoonto/jqgram>
+with slightly modified node-clone <https://github.com/pvorb/node-clone>
+

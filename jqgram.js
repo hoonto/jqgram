@@ -1,12 +1,3 @@
-// # License
-// JQGram 0.2.0 <http://hoonto.com/>
-// Copyright 2013 Hoonto <http://hoonto.com/>
-// Available under MIT License
-// Based on: 
-// Academic paper <http://www.vldb2005.org/program/paper/wed/p301-augsten.pdf>
-// PyGram implementation <https://github.com/hoonto/jqgram> 
-// with slightly modified node-clone <https://github.com/pvorb/node-clone> 
-//
 
 require("setimmediate");
 
@@ -19,16 +10,12 @@ require("setimmediate");
     // of a hierarchy from which a tree will be derived provided the label 
     // and children callback functions, lfn and cfn respectively.
     //
-    // To create a simple Node with no children provide:
-    
-    // * label: a **string** label 
-    
-    // To create a root Node and children automatically provide:
-    
-    // * label: an **object** from which the root node of the tree will be derive.
-    
+    // To create a simple Node with no children provide
+    // * label: a string label 
+    //
+    // To create a root Node and children automatically provide
+    // * label: an object from which the root node of the tree will be derive.
     // * lfn: the label callback function, which must return a string label.
-     
     // * cfn: the children callback function, which must return an array of children from which child nodes will be derived.  
     
     function Node(label, lfn, cfn){
