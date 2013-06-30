@@ -25,6 +25,14 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
+            "title": "# Node API",
+            "slug": "-node-api"
+          },
+          "depth": 1
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 1,
             "title": "Profile",
             "slug": "profile"
           },
