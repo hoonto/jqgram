@@ -66,7 +66,11 @@ before: boolean true indicates that the new node should be prepended to existing
             <span class="nx">self</span><span class="p">.</span><span class="nx">tedchildren</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="profile">Profile</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper">    <span class="kd">function</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">){</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="profile">Profile</h1>
+
+<p>Creates a PQ-Gram profile from a Node, using p and q values 
+Typicall this is not needed to be called in jqgram as it is done
+internally. </p></div></div><div class="code"><div class="wrapper">    <span class="kd">function</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Profile</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">);</span> <span class="p">}</span>
         <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">||</span> <span class="mi">2</span><span class="p">;</span>
@@ -74,9 +78,7 @@ before: boolean true indicates that the new node should be prepended to existing
         <span class="kd">var</span> <span class="nx">ancestors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">profile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">){</span>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>profile method, utilizing root, p, q, and ancestors</p></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">profile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">ancestors</span><span class="p">.</span><span class="nx">shift</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">siblings</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">q</span><span class="p">);</span>
@@ -97,15 +99,18 @@ before: boolean true indicates that the new node should be prepended to existing
                 <span class="nx">self</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">.</span><span class="nx">concatenate</span><span class="p">(</span><span class="nx">siblings</span><span class="p">));</span>
             <span class="p">}</span>
         <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>edit_distance
+determines the distance of this Profile to another
+Profile
+other: a Profile object representing the other profile
+against which to compare</p></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">union</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">other</span><span class="p">)</span> <span class="o">/</span> <span class="nx">union</span><span class="p">);</span>
-    <span class="p">};</span>
-
-    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>intersection
+determine the intersection of this Profile with another profile
+other: a Profile object representing the other profile against
+which to obtain the intersection</p></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">intersect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>

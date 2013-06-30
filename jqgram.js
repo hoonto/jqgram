@@ -77,6 +77,9 @@ require("setimmediate");
     };
 
     // # Profile
+    // Creates a PQ-Gram profile from a Node, using p and q values 
+    // Typicall this is not needed to be called in jqgram as it is done
+    // internally. 
     function Profile(root, p, q){
         var self = this;
         if(!(self instanceof Profile)){ return new Profile(root, p, q); }
@@ -87,6 +90,7 @@ require("setimmediate");
         self.profile(root, p, q, ancestors);
     }
 
+    // profile method, utilizing root, p, q, and ancestors
     Profile.prototype.profile = function(root, p, q, ancestors){
         var self = this;
         ancestors.shift(root.tedlabel);
@@ -110,12 +114,21 @@ require("setimmediate");
         }
     };
 
+    // edit_distance
+    // determines the distance of this Profile to another
+    // Profile
+    // other: a Profile object representing the other profile
+    // against which to compare
     Profile.prototype.edit_distance = function(other){
         var self = this;
         var union = self.list.length + other.list.length;
         return 1.0 - 2.0 * (self.intersection(other) / union);
     };
 
+    // intersection
+    // determine the intersection of this Profile with another profile
+    // other: a Profile object representing the other profile against
+    // which to obtain the intersection
     Profile.prototype.intersection = function(other){
         var self = this;
         var intersect = 0.0;
