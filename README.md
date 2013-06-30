@@ -8,6 +8,8 @@ Often in real-world applications it is not necessary to know the true edit dista
 
 jqgram is currently used in applications in private beta at hoonto.com and clipwidget.com. 
 
+[![Documentation (in progress)](http://hoonto.github.io/jqgram/jqgram.html)]
+
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
 Note: IE is not passing tests according to testling, however I will dig into this at a later date, please let me know if this is critical for your application and enter an issue.
