@@ -111,25 +111,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
         "title": "jqgram"
       },
       "depth": 1,
-      "outline": [
-        {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "Node",
-            "slug": "node"
-          },
-          "depth": 1
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "Profile",
-            "slug": "profile"
-          },
-          "depth": 1
-        }
-      ]
+      "outline": []
     }, {
       "type": "file",
       "data": {
@@ -160,6 +142,30 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "level": 1,
             "title": "losely based on CommonJS Modules spec v1.1.1",
             "slug": "losely-based-on-commonjs-modules-spec-v111"
+          },
+          "depth": 1
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "Node",
+            "slug": "node"
+          },
+          "depth": 1
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "Profile",
+            "slug": "profile"
+          },
+          "depth": 1
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "node-clone provided by Paul Vorbach",
+            "slug": "node-clone-provided-by-paul-vorbach"
           },
           "depth": 1
         }
