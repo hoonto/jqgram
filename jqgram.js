@@ -59,7 +59,11 @@ require("setimmediate");
             }
         }
     }
-    // 
+    // addkid
+    // Create a node and add it as a child to an existing node or to a basic node created with only a string label.
+    //
+    // node: The parent Node.
+    // before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append.
     Node.prototype.addkid = function(node, before){
         var self = this;
         before = before || false;
