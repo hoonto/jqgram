@@ -86,6 +86,14 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "slug": "tips"
           },
           "depth": 1
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "License",
+            "slug": "license"
+          },
+          "depth": 1
         }
       ]
     }, {
@@ -100,17 +108,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
         "sourcePath": "/node/hntofleet/dev/jqgram/jqgram.js",
         "projectPath": "jqgram.js",
         "targetPath": "jqgram",
-        "firstHeader": {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "License",
-            "slug": "license",
-            "isFileHeader": true
-          },
-          "depth": 1
-        },
-        "title": "License"
+        "title": "jqgram"
       },
       "depth": 1,
       "outline": [
