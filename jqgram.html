@@ -9,30 +9,24 @@
 <span class="cm"> * with slightly modified node-clone &lt;https://github.com/pvorb/node-clone&gt; </span>
 <span class="cm"> */</span>
 
-<span class="cm">/**</span>
-<span class="cm"> * Node:</span>
-<span class="cm"> *</span>
-<span class="cm"> * var pygram = require(&#39;jqgram&#39;);</span>
-<span class="cm"> *</span>
-<span class="cm"> * Browser:</span>
-<span class="cm"> *</span>
-<span class="cm"> * &lt;script src=&quot;setimmediate.js&quot;&gt;&lt;/script&gt;</span>
-<span class="cm"> * &lt;script src=&quot;jqgram.js&quot;&gt;&lt;/script&gt;</span>
-<span class="cm"> */</span>
-
 <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;setimmediate&quot;</span><span class="p">);</span>
 
 <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">){</span>
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node-api">Node API</h1>
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
-<p>Provides ability to create a raw node with no children, or a root node
-of a hierarchy from which a tree will be derived provided the label 
-and children callback functions, lfn and cfn respectively.</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a simple node with no children provide:
-label: a string label 
-To create a root node and children automatically provide:
-label: an object from which the root node of the tree will be derive.
-lfn: the label callback function, which must return a string label.
-cfn: the children callback function, which must return an array of children from which child nodes will be derived.  </p></div></div><div class="code"><div class="wrapper">    <span class="kd">function</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">){</span>
+    <span class="cm">/* # Node API</span>
+<span class="cm">     * Provides ability to create a raw node with no children, or a root node</span>
+<span class="cm">     * of a hierarchy from which a tree will be derived provided the label </span>
+<span class="cm">     * and children callback functions, lfn and cfn respectively.</span>
+<span class="cm">     *</span>
+<span class="cm">     * To create a simple node with no children provide:</span>
+<span class="cm">     * label: a string label </span>
+<span class="cm">     * To create a root node and children automatically provide:</span>
+<span class="cm">     * label: an object from which the root node of the tree will be derive.</span>
+<span class="cm">     * lfn: the label callback function, which must return a string label.</span>
+<span class="cm">     * cfn: the children callback function, which must return an array of children from which child nodes will be derived.  </span>
+<span class="cm">     */</span>
+    <span class="kd">function</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Node</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">);</span> <span class="p">}</span>
 
