@@ -3,11 +3,10 @@
 <p>Provides ability to create a raw node with no children, or a root node
 of a hierarchy from which a tree will be derived provided the label 
 and children callback functions, lfn and cfn respectively.
-To create a simple Node with no children provide
-* label: a string label </p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Node</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="node-constructor">Node Constructor</h2>
+To create a simple Node with no children provide</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Node</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="node-constructor">Node Constructor</h2>
 
 <ul>
-<li>label: a string for simple Node with no children, an object from which the root node of the tree will be derived provided lfn and cfn label and callbacck functions provided.</li>
+<li>label: a string for simple Node with no children or an object from which the root node of the tree will be derived provided lfn and cfn label and callbacck functions provided.</li>
 <li>lfn: the label callback function, which must return a string label.  Ignored if label is a string</li>
 <li>cfn: the children callback function, which must return an array of children from which child nodes will be derived.  Ignored if label is a string. </li>
 </ul></div></div><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">){</span>
@@ -35,8 +34,8 @@ To create a simple Node with no children provide
 <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="nodeaddkid">Node.addkid</h2>
 
 <p>Create a node and add it as a child to an existing node or to a basic node created with only a string label.
-node: The parent Node.
-before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append.</p></div></div><div class="code"><div class="wrapper"><span class="nx">Node</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addkid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">before</span><span class="p">){</span>
+* node: The parent Node.
+* before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append, default false.</p></div></div><div class="code"><div class="wrapper"><span class="nx">Node</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addkid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">before</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="nx">before</span> <span class="o">=</span> <span class="nx">before</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
     <span class="k">if</span><span class="p">(</span><span class="nx">before</span><span class="p">){</span>
