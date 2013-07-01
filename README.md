@@ -8,7 +8,7 @@ Often in real-world applications it is not necessary to know the true edit dista
 
 jqgram is currently used in applications in private beta at hoonto.com and clipwidget.com. 
 
-<a href="http://hoonto.github.io/jqgram/jqgram.html">Documentation in progress</a> (using <a href="http://nevir.github.io/groc">Groc</a>)
+<a href="http://hoonto.github.io/jqgram/index.html">Documentation in progress</a> (using <a href="http://nevir.github.io/groc">Groc</a>)
 
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
