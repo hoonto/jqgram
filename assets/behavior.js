@@ -50,15 +50,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "Node Constructor",
                 "slug": "node-constructor"
               },
-              "depth": 2
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Node.addkid",
-                "slug": "nodeaddkid"
-              },
-              "depth": 2
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Node.addkid",
+                    "slug": "nodeaddkid"
+                  },
+                  "depth": 3
+                }
+              ]
             }
           ]
         },
@@ -73,15 +76,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "Node Constructor",
             "slug": "node-constructor"
           },
-          "depth": 2
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 2,
-            "title": "Node.addkid",
-            "slug": "nodeaddkid"
-          },
-          "depth": 2
+          "depth": 2,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Node.addkid",
+                "slug": "nodeaddkid"
+              },
+              "depth": 3
+            }
+          ]
         }
       ]
     }, {
@@ -171,53 +177,64 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "Profile Constructor",
                 "slug": "profile-constructor"
               },
-              "depth": 2
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Profile.profile",
+                    "slug": "profileprofile"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Profile.edit_distance",
+                    "slug": "profileedit-distance"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Profile.intersection",
+                    "slug": "profileintersection"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Profile.compare",
+                    "slug": "profilecompare"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Profile.append",
+                    "slug": "profileappend"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Profile.len",
+                    "slug": "profilelen"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "heading",
               "data": {
                 "level": 2,
-                "title": "Profile.profile",
-                "slug": "profileprofile"
-              },
-              "depth": 2
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Profile.edit_distance",
-                "slug": "profileedit-distance"
-              },
-              "depth": 2
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Profile.intersection",
-                "slug": "profileintersection"
-              },
-              "depth": 2
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Profile.compare",
-                "slug": "profilecompare"
-              },
-              "depth": 2
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Profile.append",
-                "slug": "profileappend"
-              },
-              "depth": 2
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Profile.len",
-                "slug": "profilelen"
+                "title": "node-clone provided by Paul Vorbach",
+                "slug": "node-clone-provided-by-paul-vorbach"
               },
               "depth": 2
             }
@@ -234,63 +251,66 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "Profile Constructor",
             "slug": "profile-constructor"
           },
-          "depth": 2
+          "depth": 2,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Profile.profile",
+                "slug": "profileprofile"
+              },
+              "depth": 3
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Profile.edit_distance",
+                "slug": "profileedit-distance"
+              },
+              "depth": 3
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Profile.intersection",
+                "slug": "profileintersection"
+              },
+              "depth": 3
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Profile.compare",
+                "slug": "profilecompare"
+              },
+              "depth": 3
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Profile.append",
+                "slug": "profileappend"
+              },
+              "depth": 3
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Profile.len",
+                "slug": "profilelen"
+              },
+              "depth": 3
+            }
+          ]
         }, {
           "type": "heading",
           "data": {
             "level": 2,
-            "title": "Profile.profile",
-            "slug": "profileprofile"
-          },
-          "depth": 2
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 2,
-            "title": "Profile.edit_distance",
-            "slug": "profileedit-distance"
-          },
-          "depth": 2
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 2,
-            "title": "Profile.intersection",
-            "slug": "profileintersection"
-          },
-          "depth": 2
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 2,
-            "title": "Profile.compare",
-            "slug": "profilecompare"
-          },
-          "depth": 2
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 2,
-            "title": "Profile.append",
-            "slug": "profileappend"
-          },
-          "depth": 2
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 2,
-            "title": "Profile.len",
-            "slug": "profilelen"
-          },
-          "depth": 2
-        }, {
-          "type": "heading",
-          "data": {
-            "level": 1,
             "title": "node-clone provided by Paul Vorbach",
             "slug": "node-clone-provided-by-paul-vorbach"
           },
-          "depth": 1
+          "depth": 2
         }
       ]
     }, {
@@ -305,16 +325,13 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
         "sourcePath": "/node/hntofleet/dev/jqgram/lib/shiftregister.js",
         "projectPath": "lib/shiftregister.js",
         "targetPath": "shiftregister",
-        "title": "shiftregister"
-      },
-      "depth": 1,
-      "outline": [
-        {
+        "firstHeader": {
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "ShiftRegister Constructor",
-            "slug": "shiftregister-constructor"
+            "title": "ShiftRegister",
+            "slug": "shiftregister",
+            "isFileHeader": true
           },
           "depth": 1,
           "children": [
@@ -322,26 +339,77 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "type": "heading",
               "data": {
                 "level": 2,
+                "title": "ShiftRegister Constructor",
+                "slug": "shiftregister-constructor"
+              },
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "ShiftRegister.concatenate",
+                    "slug": "shiftregisterconcatenate"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "ShiftRegister.shift",
+                    "slug": "shiftregistershift"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "ShiftRegister.len",
+                    "slug": "shiftregisterlen"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
+        },
+        "title": "ShiftRegister"
+      },
+      "depth": 1,
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "ShiftRegister Constructor",
+            "slug": "shiftregister-constructor"
+          },
+          "depth": 2,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
                 "title": "ShiftRegister.concatenate",
                 "slug": "shiftregisterconcatenate"
               },
-              "depth": 2
+              "depth": 3
             }, {
               "type": "heading",
               "data": {
-                "level": 2,
+                "level": 3,
                 "title": "ShiftRegister.shift",
                 "slug": "shiftregistershift"
               },
-              "depth": 2
+              "depth": 3
             }, {
               "type": "heading",
               "data": {
-                "level": 2,
+                "level": 3,
                 "title": "ShiftRegister.len",
                 "slug": "shiftregisterlen"
               },
-              "depth": 2
+              "depth": 3
             }
           ]
         }

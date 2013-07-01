@@ -2,9 +2,7 @@
 
 <p>Creates a PQ-Gram profile from a Node, using p and q values </p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">ShiftRegister</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./shiftregister.js&quot;</span><span class="p">);</span>
 
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Profile</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profile-constructor">Profile Constructor</h2>
-
-<ul>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Profile</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profile-constructor">Profile Constructor</h2></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
 <li>root: the root Node </li>
 <li>p: the p value in the PQ-Gram algorithm</li>
 <li>q: the q value in the PQ-Gram algorithm</li>
@@ -16,9 +14,7 @@
     <span class="kd">var</span> <span class="nx">ancestors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">[];</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">);</span>
-<span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profileprofile">Profile.profile</h2>
-
-<ul>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profileprofile">Profile.profile</h3></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
 <li>root: the root Node</li>
 <li>p: the p value in the PQ-Gram algorithm</li>
 <li>q: the q value in the PQ-Gram algorithm</li>
@@ -44,20 +40,22 @@
             <span class="nx">self</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">ancestors</span><span class="p">.</span><span class="nx">concatenate</span><span class="p">(</span><span class="nx">siblings</span><span class="p">));</span>
         <span class="p">}</span>
     <span class="p">}</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profileedit-distance">Profile.edit_distance</h2>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profileedit-distance">Profile.edit_distance</h3>
 
 <p>Determines the distance of this Profile to another
-Profile.
-   * other: a Profile object representing the other profile against which to compare
-   * returns: the PQ-Gram edit_distance between this Profile and another Profile</p></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+Profile.</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>other: a Profile object representing the other profile against which to compare</li>
+<li>returns: the PQ-Gram edit_distance between this Profile and another Profile</li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">union</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
     <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">other</span><span class="p">)</span> <span class="o">/</span> <span class="nx">union</span><span class="p">);</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profileintersection">Profile.intersection</h2>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profileintersection">Profile.intersection</h3>
 
-<p>Determine the intersection of this Profile with another profile
-   * other: a Profile object representing the other profile against which to obtain the intersection
-   * returns: the intersection between this profile and other profile</p></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+<p>Determine the intersection of this Profile with another profile</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>other: a Profile object representing the other profile against which to obtain the intersection</li>
+<li>returns: the intersection between this profile and other profile</li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">intersect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -76,51 +74,51 @@ Profile.
         <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">intersect</span><span class="p">;</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profilecompare">Profile.compare</h2>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profilecompare">Profile.compare</h3>
 
-<p>Compare two arrays
-   * a1: the first array
-   * a2: the second array
-   * returns: true of arrays are same, false otherwise</p></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compare</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a1</span><span class="p">,</span><span class="nx">a2</span><span class="p">)</span> <span class="p">{</span>
+<p>Compare two arrays</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>a1: the first array</li>
+<li>a2: the second array</li>
+<li>returns: true of arrays are same, false otherwise</li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compare</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a1</span><span class="p">,</span><span class="nx">a2</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">a1</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="nx">a2</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">a2</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">//if (!self.compare(a1[i],a2[i])) return false;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">a1</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">a2</span><span class="p">[</span><span class="nx">i</span><span class="p">]){</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profilegram_edit_distance">Profile.gram<em>edit</em>distance</h2>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profilegram_edit_distance">Profile.gram<em>edit</em>distance</h3>
 
-<p>Get the gram edit distance between two grams by comparing them as arrays and returning one or zero
-   * gram1: the first gram
-   * gram2: the second gtam
-   * returns: 1 if gram1 and gram2 are the same, 0 if they are different</p></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">gram_edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span> <span class="nx">gram2</span><span class="p">){</span>
+<p>Get the gram edit distance between two grams by comparing them as arrays and returning one or zero</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>gram1: the first gram</li>
+<li>gram2: the second gtam</li>
+<li>returns: 1 if gram1 and gram2 are the same, 0 if they are different</li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">gram_edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span> <span class="nx">gram2</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">distance</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
     <span class="k">if</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">compare</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span><span class="nx">gram2</span><span class="p">)){</span>
         <span class="nx">distance</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">distance</span><span class="p">;</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profileappend">Profile.append</h2>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profileappend">Profile.append</h3>
 
-<p>Appends a value to the Profile's list array.
-   * value: the value to append</p></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+<p>Appends a value to the Profile's list array.</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>value: the value to append</li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profilelen">Profile.len</h2>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profilelen">Profile.len</h3>
 
-<p>Provides the length of the Profile indicated by prof, or the length of this Profile if prof is not provided
-   * prof: the profile for which to obtain list length.</p></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prof</span><span class="p">)</span> <span class="p">{</span>
+<p>Provides the length of the Profile indicated by prof, or the length of this Profile if prof is not provided</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>prof: the profile for which to obtain list length.</li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prof</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">prof</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
         <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
     <span class="p">}</span><span class="k">else</span><span class="p">{</span>
         <span class="k">return</span> <span class="nx">prof</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
     <span class="p">}</span>
-<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node-clone-provided-by-paul-vorbach">node-clone provided by Paul Vorbach</h1>
-
-<p>Copyright © 2011-2013 Paul Vorbach
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p></div></div><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">circular</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="node-clone-provided-by-paul-vorbach">node-clone provided by Paul Vorbach</h2></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Copyright © 2011-2013 Paul Vorbach</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p></div></div><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">circular</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">circular</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
         <span class="nx">circular</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">}</span>
