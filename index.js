@@ -1,6 +1,6 @@
 // # JQGram
 
-// Utilizes setImmediate if available, otherwise falls back to setTImeout
+// Utilizes setImmediate if available, otherwise falls back to setTimeout
 require("setimmediate");
 // ## node.js
 // Defines a Node of a tree as containing a label and an array of children.
@@ -25,7 +25,7 @@ var ShiftRegister = require("./lib/shiftregister.js");
     // Please see the examples on github for more details on how to use the distance function to define the trees, the p and q options, and the callback (cb) function that is provided with the resulting pq-gram edit distance.
     
     // * roota: An object that contains the root of the first tree with the lfn (label callback function) and cfn (child callback function) defined.
-    // * roota: An object that represents the root of the second tree with the lfn (label callback function) and cfn (child callback function) defined.
+    // * rootb: An object that represents the root of the second tree with the lfn (label callback function) and cfn (child callback function) defined.
     // * opts (optional): An object that contains p and q values, default: "{p: 2, q: 3}"
     // * cb: the callback function that will be executed with one argument, an object with a property "distance" that contains a float value between 0.0 and 1.0 representing the pq-gram edit distance  approximation between the trees rooted at roota and rootb.
         distance: function(roota, rootb, opts, cb) {
