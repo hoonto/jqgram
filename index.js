@@ -1,6 +1,6 @@
 // # JQGram
 
-// Utilizes setImmediate 
+// Utilizes setImmediate if available, otherwise falls back to setTImeout
 require("setimmediate");
 // ## node.js
 // Defines a Node of a tree as containing a label and an array of children.
