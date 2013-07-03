@@ -337,8 +337,14 @@ var global = Function("return this;")();
     , $ = require("ender")
     ;
   
-  module.exports = ShiftRegister;
+  // # ShiftRegister 
+    // Provides a wrapper around the arrays that aid the PQ-Gram algorithm
     
+    module.exports = ShiftRegister;
+    
+    // ## ShiftRegister Constructor
+    
+    //    * size: the size of the register (size of the array).
     function ShiftRegister(size) {
         var self = this;
         if(!(self instanceof ShiftRegister)){ return new ShiftRegister(size); }
@@ -348,6 +354,9 @@ var global = Function("return this;")();
         }
     }
     
+    // ### ShiftRegister.concatenate
+    
+    //    * reg: the ShiftRegister that should be concatenated with this ShiftRegister
     ShiftRegister.prototype.concatenate = function(reg){
         var self = this;
         var temp = self.register.slice(0);//self.list(self.register);
@@ -355,12 +364,20 @@ var global = Function("return this;")();
         return arr;
     };
     
+    // ### ShiftRegister.shift
+    // shift removes an element from the front of the list and pushes the provided element to the back of the list.  So in essence, it does a shift() then a push() on the internal array that this ShiftRegister wraps.
+    
+    //    * el: the element to push.
     ShiftRegister.prototype.shift = function(el){
         var self = this;
         self.register.shift();
         self.register.push(el);
     };
     
+    // ### ShiftRegister.len
+    // len provides the length of this ShiftRegister (the internal array that this ShiftRegister represents), or the ShiftRegister itself.
+    
+    //    * reg: a ShiftRegister that if provided the length is desired, otherwise if not provided, the length of this ShiftRegister is returned. 
     ShiftRegister.prototype.len = function(reg) {
         var self = this;
         if(typeof reg === 'undefined'){
@@ -382,21 +399,18 @@ var global = Function("return this;")();
     ;
   
   // # Node
-    //
     // Provides ability to create a raw node with no children, or a root node
     // of a hierarchy from which a tree will be derived provided the label 
     // and children callback functions, lfn and cfn respectively.
-    //
     // To create a simple Node with no children provide
-    // * label: a string label 
-    //
-    // To create a root Node and children automatically provide
-    // * label: an object from which the root node of the tree will be derive.
-    // * lfn: the label callback function, which must return a string label.
-    // * cfn: the children callback function, which must return an array of children from which child nodes will be derived.  
+    
     
     module.exports = Node;
     
+    // ## Node Constructor
+    //    * label: a string for simple Node with no children or an object from which the root node of the tree will be derived provided lfn and cfn label and callbacck functions provided.
+    //    * lfn: the label callback function, which must return a string label.  Ignored if label is a string
+    //    * cfn: the children callback function, which must return an array of children from which child nodes will be derived.  Ignored if label is a string. 
     function Node(label, lfn, cfn){
         var self = this;
         if(!(self instanceof Node)){ return new Node(label, lfn, cfn); }
@@ -420,11 +434,12 @@ var global = Function("return this;")();
             }
         }
     }
-    // Node.addkid
+    
+    // ### Node.addkid
     // Create a node and add it as a child to an existing node or to a basic node created with only a string label.
-    //
-    // node: The parent Node.
-    // before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append.
+    
+    //    * node: The parent Node.
+    //    * before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append, default false.
     Node.prototype.addkid = function(node, before){
         var self = this;
         before = before || false;
@@ -450,14 +465,16 @@ var global = Function("return this;")();
   
   // # Profile
     // Creates a PQ-Gram profile from a Node, using p and q values 
-    // Typicall this is not needed to be called in jqgram as it is done
-    // internally. 
-    //
     
     var ShiftRegister =  require('jqgram/lib/shiftregister.js');
     
     module.exports = Profile;
     
+    // ## Profile Constructor
+    
+    //    * root: the root Node 
+    //    * p: the p value in the PQ-Gram algorithm
+    //    * q: the q value in the PQ-Gram algorithm
     function Profile(root, p, q){
         var self = this;
         if(!(self instanceof Profile)){ return new Profile(root, p, q); }
@@ -468,7 +485,12 @@ var global = Function("return this;")();
         self.profile(root, p, q, ancestors);
     }
     
-    // Profile.profile method, utilizing root, p, q, and ancestors
+    // ### Profile.profile 
+    
+    //    * root: the root Node
+    //    * p: the p value in the PQ-Gram algorithm
+    //    * q: the q value in the PQ-Gram algorithm
+    //    * ancestors: the ancestors
     Profile.prototype.profile = function(root, p, q, ancestors){
         var self = this;
         ancestors.shift(root.tedlabel);
@@ -492,21 +514,23 @@ var global = Function("return this;")();
         }
     };
     
-    // edit_distance
-    // determines the distance of this Profile to another
-    // Profile
-    // other: a Profile object representing the other profile
-    // against which to compare
+    // ### Profile.edit_distance
+    // Determines the distance of this Profile to another
+    // Profile.
+    
+    //    * other: a Profile object representing the other profile against which to compare
+    //    * returns: the PQ-Gram edit_distance between this Profile and another Profile
     Profile.prototype.edit_distance = function(other){
         var self = this;
         var union = self.list.length + other.list.length;
         return 1.0 - 2.0 * (self.intersection(other) / union);
     };
     
-    // intersection
-    // determine the intersection of this Profile with another profile
-    // other: a Profile object representing the other profile against
-    // which to obtain the intersection
+    // ### Profile.intersection
+    // Determine the intersection of this Profile with another profile
+    
+    //    * other: a Profile object representing the other profile against which to obtain the intersection
+    //    * returns: the intersection between this profile and other profile
     Profile.prototype.intersection = function(other){
         var self = this;
         var intersect = 0.0;
@@ -528,6 +552,12 @@ var global = Function("return this;")();
         return intersect;
     };
     
+    // ### Profile.compare
+    // Compare two arrays
+    
+    //    * a1: the first array
+    //    * a2: the second array
+    //    * returns: true of arrays are same, false otherwise
     Profile.prototype.compare = function(a1,a2) {
         if (a1.length !== a2.length){ return false; }
         for (var i = 0; i < a2.length; i++) {
@@ -537,6 +567,12 @@ var global = Function("return this;")();
         return true;
     };
     
+    // ### Profile.gram_edit_distance
+    // Get the gram edit distance between two grams by comparing them as arrays and returning one or zero
+    
+    //    * gram1: the first gram
+    //    * gram2: the second gtam
+    //    * returns: 1 if gram1 and gram2 are the same, 0 if they are different
     Profile.prototype.gram_edit_distance = function(gram1, gram2){
         var self = this;
         var distance = 0.0;
@@ -546,11 +582,19 @@ var global = Function("return this;")();
         return distance;
     };
     
+    // ### Profile.append
+    // Appends a value to the Profile's list array.
+    
+    //    * value: the value to append
     Profile.prototype.append = function(value){
         var self = this;
         self.list.push(value);
     };
     
+    // ### Profile.len
+    // Provides the length of the Profile indicated by prof, or the length of this Profile if prof is not provided
+    
+    //    * prof: the profile for which to obtain list length.
     Profile.prototype.len = function(prof) {
         var self = this;
         if(typeof prof === 'undefined'){
@@ -560,10 +604,12 @@ var global = Function("return this;")();
         }
     };
     
-    // # node-clone provided by Paul Vorbach
-    //
+    // ## node-clone provided by Paul Vorbach
+    
     // Copyright © 2011-2013 Paul Vorbach
+    
     // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+    
     // The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
     
     function clone(parent, circular) {
@@ -698,17 +744,38 @@ var global = Function("return this;")();
     , $ = require("ender")
     ;
   
-  
+  // # JQGram
+    
+    // Utilizes setImmediate 
     require("setimmediate");
+    // ## node.js
+    // Defines a Node of a tree as containing a label and an array of children.
     var Node =  require('jqgram/lib/node.js');
+    // ## profile.js 
+    // The guts of the pq-gram algorithm
     var Profile =  require('jqgram/lib/profile.js');
+    // ## shiftregister.js
+    // Convenience for profile.js and differs slightly from the Python PyGram implementation from which jqgram was originally ported.
+    var ShiftRegister =  require('jqgram/lib/shiftregister.js');
     
     (function(exports, undefined){
     
         var setImmediate = !!setImmediate ? setImmediate : function(fn){setTimeout(fn,0); };
     
+        // ## jqgram
+        // The jqgram object exposes one method and three constructors, however in typical usage, only the distance method is used.  Node, Profile, and ShiftRegister are however exposed for custom requirements.
+    
         exports.jqgram = {
+        // ### distance
+        // Allows easy generation of two profiles defined by root nodes, and returns the resulting pq-gram edit distance approximation.
+        // Please see the examples on github for more details on how to use the distance function to define the trees, the p and q options, and the callback (cb) function that is provided with the resulting pq-gram edit distance.
+        
+        // * roota: An object that contains the root of the first tree with the lfn (label callback function) and cfn (child callback function) defined.
+        // * roota: An object that represents the root of the second tree with the lfn (label callback function) and cfn (child callback function) defined.
+        // * opts (optional): An object that contains p and q values, default: "{p: 2, q: 3}"
+        // * cb: the callback function that will be executed with one argument, an object with a property "distance" that contains a float value between 0.0 and 1.0 representing the pq-gram edit distance  approximation between the trees rooted at roota and rootb.
             distance: function(roota, rootb, opts, cb) {
+                if(typeof opts === 'function') cb = opts, opts = {};
                 opts.p = opts.p || 2;
                 opts.q = opts.q || 3;
                 setImmediate(function() {
@@ -719,11 +786,16 @@ var global = Function("return this;")();
                     cb({ "distance": profa.edit_distance(profb) });
                 });
             },
+            //    * Node: allow creation of basic nodes with labels and children
             Node: Node,
-            Profile: Profile
+            //    * Profile: allows edit_distances to be determined between manuallly created profiles 
+            Profile: Profile,
+            //    * ShiftRegister: mainly exposed for test cases, not typically used by developers
+            ShiftRegister: ShiftRegister
         };
     
     
+    // allow jqgram to be utilized in browser or node environments:
     })(typeof exports === 'undefined' ? this.jqgram = {} : exports);
     
     
