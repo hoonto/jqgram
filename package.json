@@ -1,7 +1,7 @@
 {
     "name": "jqgram",
     "description": "PQ-Gram tree edit distance approximation in browsers and Node.js",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "license" : "MIT",
     "repository": {
         "type": "git",
