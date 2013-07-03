@@ -2,8 +2,8 @@
 
 // Utilizes setImmediate 
 require("setimmediate");
-//  ## node.js
-//  Defines a Node of a tree as containing a label and an array of children.
+// ## node.js
+// Defines a Node of a tree as containing a label and an array of children.
 var Node = require("./lib/node.js");
 // ## profile.js 
 // The guts of the pq-gram algorithm
@@ -17,18 +17,19 @@ var ShiftRegister = require("./lib/shiftregister.js");
     var setImmediate = !!setImmediate ? setImmediate : function(fn){setTimeout(fn,0); };
 
     // ## jqgram
-    // The jqgram object exposes one method and three constructors, however in typical usage, only the distance method is used.  Node, Profile, and ShiftRegister are however exposed for custome requirements.
+    // The jqgram object exposes one method and three constructors, however in typical usage, only the distance method is used.  Node, Profile, and ShiftRegister are however exposed for custom requirements.
 
     exports.jqgram = {
     // ### distance
-    // allows easy generation of two profiles defined by root nodes, and returns the resulting pq-gram edit distance approximation.
+    // Allows easy generation of two profiles defined by root nodes, and returns the resulting pq-gram edit distance approximation.
     // Please see the examples on github for more details on how to use the distance function to define the trees, the p and q options, and the callback (cb) function that is provided with the resulting pq-gram edit distance.
     
-    // * roota: An object that contains the root of the first tree with the lfn (label callbafck function) and cfn (child callbackfunction) defined.
-    // * roota: An object that represents the root of the second tree with the lfn (label callbafck function) and cfn (child callbackfunction) defined.
-    // * opts: An object that contains p and q values, default: "{p: 2, q: 3}"
+    // * roota: An object that contains the root of the first tree with the lfn (label callback function) and cfn (child callback function) defined.
+    // * roota: An object that represents the root of the second tree with the lfn (label callback function) and cfn (child callback function) defined.
+    // * opts (optional): An object that contains p and q values, default: "{p: 2, q: 3}"
     // * cb: the callback function that will be executed with one argument, an object with a property "distance" that contains a float value between 0.0 and 1.0 representing the pq-gram edit distance  approximation between the trees rooted at roota and rootb.
         distance: function(roota, rootb, opts, cb) {
+            if(typeof opts === 'function') cb = opts, opts = {};
             opts.p = opts.p || 2;
             opts.q = opts.q || 3;
             setImmediate(function() {
