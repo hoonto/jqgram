@@ -2,7 +2,7 @@
 
 This module implements the PQ-Gram tree edit distance approximation algorithm for both server-side and browser-side applications; O(n log n) time and O(n) space performant where n is number of nodes in the trees.
 
-The PQ-Gram approximation is much faster than obtaining the true edit distance via Zhang & Shasha, Klein, or Guha et. al, whom provide true edit distance algorithms that all perform minimum O(n<sup>2</sup>) time in O(n) space and are therefore unsuitable for many applications at scale.
+The PQ-Gram approximation is much faster than obtaining the true edit distance via Zhang & Shasha, Klein, or Guha et. al, whom provide true edit distance algorithms that all perform around O(n<sup>3</sup) to O(n<sup>2</sup>) time in O(n) space and are therefore unsuitable for many applications at scale.
 
 Often in real-world applications it is not necessary to know the true edit distance if a relative approximation of multiple trees to a known standard can be obtained.  Javascript, in the browser and now on the server with the advent of Node.js deal frequently with tree structures and end-user performance is usually critical in algorithm implementation and design; thus jqgram.
 
