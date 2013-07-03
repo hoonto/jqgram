@@ -277,10 +277,13 @@ into the document. Do so, thus queuing up the task. Remember to clean up once it
   <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">exports</span><span class="o">:</span> <span class="p">{}</span> <span class="p">},</span> <span class="nx">exports</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span>
     <span class="p">,</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;ender&quot;</span><span class="p">)</span>
     <span class="p">;</span>
-  
-  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ShiftRegister</span><span class="p">;</span>
-    
-    <span class="kd">function</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+  </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="shiftregister">ShiftRegister</h1>
+
+<p>Provides a wrapper around the arrays that aid the PQ-Gram algorithm</p></div></div><div class="code"><div class="wrapper">    
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ShiftRegister</span><span class="p">;</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="shiftregister-constructor">ShiftRegister Constructor</h2></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>size: the size of the register (size of the array).</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="kd">function</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">ShiftRegister</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">size</span><span class="p">);</span> <span class="p">}</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="p">[];</span>
@@ -288,21 +291,28 @@ into the document. Do so, thus queuing up the task. Remember to clean up once it
             <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
-    
-    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">concatenate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">){</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="shiftregisterconcatenate">ShiftRegister.concatenate</h3></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>reg: the ShiftRegister that should be concatenated with this ShiftRegister</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">concatenate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="c1">//self.list(self.register);</span>
         <span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="nx">temp</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">reg</span><span class="p">.</span><span class="nx">register</span><span class="p">);</span>
         <span class="k">return</span> <span class="nx">arr</span><span class="p">;</span>
     <span class="p">};</span>
-    
-    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">shift</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="shiftregistershift">ShiftRegister.shift</h3>
+
+<p>shift removes an element from the front of the list and pushes the provided element to the back of the list.  So in essence, it does a shift() then a push() on the internal array that this ShiftRegister wraps.</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>el: the element to push.</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">shift</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
     <span class="p">};</span>
-    
-    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">)</span> <span class="p">{</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="shiftregisterlen">ShiftRegister.len</h3>
+
+<p>len provides the length of this ShiftRegister (the internal array that this ShiftRegister represents), or the ShiftRegister itself.</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>reg: a ShiftRegister that if provided the length is desired, otherwise if not provided, the length of this ShiftRegister is returned. </li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">ShiftRegister</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">reg</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
             <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">register</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
@@ -318,16 +328,21 @@ into the document. Do so, thus queuing up the task. Remember to clean up once it
   <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">exports</span><span class="o">:</span> <span class="p">{}</span> <span class="p">},</span> <span class="nx">exports</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span>
     <span class="p">,</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;ender&quot;</span><span class="p">)</span>
     <span class="p">;</span>
-  </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node">Node</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Provides ability to create a raw node with no children, or a root node
+  </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node">Node</h1>
+
+<p>Provides ability to create a raw node with no children, or a root node
 of a hierarchy from which a tree will be derived provided the label 
-and children callback functions, lfn and cfn respectively.</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a simple Node with no children provide
-* label: a string label </p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>To create a root Node and children automatically provide
-* label: an object from which the root node of the tree will be derive.
-* lfn: the label callback function, which must return a string label.
-* cfn: the children callback function, which must return an array of children from which child nodes will be derived.  </p></div></div><div class="code"><div class="wrapper">    
-    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Node</span><span class="p">;</span>
+and children callback functions, lfn and cfn respectively.
+To create a simple Node with no children provide</p></div></div><div class="code"><div class="wrapper">    
     
-    <span class="kd">function</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">){</span>
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Node</span><span class="p">;</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="node-constructor">Node Constructor</h2>
+
+<ul>
+<li>label: a string for simple Node with no children or an object from which the root node of the tree will be derived provided lfn and cfn label and callbacck functions provided.</li>
+<li>lfn: the label callback function, which must return a string label.  Ignored if label is a string</li>
+<li>cfn: the children callback function, which must return an array of children from which child nodes will be derived.  Ignored if label is a string. </li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="kd">function</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Node</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">lfn</span><span class="p">,</span> <span class="nx">cfn</span><span class="p">);</span> <span class="p">}</span>
     
@@ -349,9 +364,13 @@ and children callback functions, lfn and cfn respectively.</p></div></div><div c
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Node.addkid
-Create a node and add it as a child to an existing node or to a basic node created with only a string label.</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>node: The parent Node.
-before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">Node</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addkid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">before</span><span class="p">){</span>
+    <span class="p">}</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="nodeaddkid">Node.addkid</h3>
+
+<p>Create a node and add it as a child to an existing node or to a basic node created with only a string label.</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>node: The parent Node.</li>
+<li>before: boolean true indicates that the new node should be prepended to existing children of the parent node, false to append, default false.</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">Node</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addkid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">before</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">before</span> <span class="o">=</span> <span class="nx">before</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="nx">before</span><span class="p">){</span>
@@ -372,15 +391,15 @@ before: boolean true indicates that the new node should be prepended to existing
     <span class="p">;</span>
   </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="profile">Profile</h1>
 
-<p>Creates a PQ-Gram profile from a Node, using p and q values 
-Typicall this is not needed to be called in jqgram as it is done
-internally. </p></div></div><div class="code"><div class="wrapper">    <span class="c1">//</span>
-    
+<p>Creates a PQ-Gram profile from a Node, using p and q values </p></div></div><div class="code"><div class="wrapper">    
     <span class="kd">var</span> <span class="nx">ShiftRegister</span> <span class="o">=</span>  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jqgram/lib/shiftregister.js&#39;</span><span class="p">);</span>
     
     <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Profile</span><span class="p">;</span>
-    
-    <span class="kd">function</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">){</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profile-constructor">Profile Constructor</h2></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>root: the root Node </li>
+<li>p: the p value in the PQ-Gram algorithm</li>
+<li>q: the q value in the PQ-Gram algorithm</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="kd">function</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">self</span> <span class="k">instanceof</span> <span class="nx">Profile</span><span class="p">)){</span> <span class="k">return</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">);</span> <span class="p">}</span>
         <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">||</span> <span class="mi">2</span><span class="p">;</span>
@@ -389,7 +408,12 @@ internally. </p></div></div><div class="code"><div class="wrapper">    <span cla
         <span class="nx">self</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">);</span>
     <span class="p">}</span>
-    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Profile.profile method, utilizing root, p, q, and ancestors</p></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">profile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">){</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profileprofile">Profile.profile</h3></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>root: the root Node</li>
+<li>p: the p value in the PQ-Gram algorithm</li>
+<li>q: the q value in the PQ-Gram algorithm</li>
+<li>ancestors: the ancestors</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">profile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">ancestors</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">ancestors</span><span class="p">.</span><span class="nx">shift</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">tedlabel</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">siblings</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ShiftRegister</span><span class="p">(</span><span class="nx">q</span><span class="p">);</span>
@@ -411,19 +435,23 @@ internally. </p></div></div><div class="code"><div class="wrapper">    <span cla
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">};</span>
-    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>edit_distance
-determines the distance of this Profile to another
-Profile
-other: a Profile object representing the other profile
-against which to compare</p></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profileedit-distance">Profile.edit_distance</h3>
+
+<p>Determines the distance of this Profile to another
+Profile.</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>other: a Profile object representing the other profile against which to compare</li>
+<li>returns: the PQ-Gram edit_distance between this Profile and another Profile</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">union</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">other</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">other</span><span class="p">)</span> <span class="o">/</span> <span class="nx">union</span><span class="p">);</span>
     <span class="p">};</span>
-    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>intersection
-determine the intersection of this Profile with another profile
-other: a Profile object representing the other profile against
-which to obtain the intersection</p></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profileintersection">Profile.intersection</h3>
+
+<p>Determine the intersection of this Profile with another profile</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>other: a Profile object representing the other profile against which to obtain the intersection</li>
+<li>returns: the intersection between this profile and other profile</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">intersection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">other</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">intersect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -443,8 +471,13 @@ which to obtain the intersection</p></div></div><div class="code"><div class="wr
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">intersect</span><span class="p">;</span>
     <span class="p">};</span>
-    
-    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compare</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a1</span><span class="p">,</span><span class="nx">a2</span><span class="p">)</span> <span class="p">{</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profilecompare">Profile.compare</h3>
+
+<p>Compare two arrays</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>a1: the first array</li>
+<li>a2: the second array</li>
+<li>returns: true of arrays are same, false otherwise</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compare</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a1</span><span class="p">,</span><span class="nx">a2</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">a1</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="nx">a2</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">a2</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">//if (!self.compare(a1[i],a2[i])) return false;</span>
@@ -452,8 +485,13 @@ which to obtain the intersection</p></div></div><div class="code"><div class="wr
         <span class="p">}</span>
         <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">};</span>
-    
-    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">gram_edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span> <span class="nx">gram2</span><span class="p">){</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profilegram_edit_distance">Profile.gram<em>edit</em>distance</h3>
+
+<p>Get the gram edit distance between two grams by comparing them as arrays and returning one or zero</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>gram1: the first gram</li>
+<li>gram2: the second gtam</li>
+<li>returns: 1 if gram1 and gram2 are the same, 0 if they are different</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">gram_edit_distance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span> <span class="nx">gram2</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">distance</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">compare</span><span class="p">(</span><span class="nx">gram1</span><span class="p">,</span><span class="nx">gram2</span><span class="p">)){</span>
@@ -461,13 +499,19 @@ which to obtain the intersection</p></div></div><div class="code"><div class="wr
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">distance</span><span class="p">;</span>
     <span class="p">};</span>
-    
-    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profileappend">Profile.append</h3>
+
+<p>Appends a value to the Profile's list array.</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>value: the value to append</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
     <span class="p">};</span>
-    
-    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prof</span><span class="p">)</span> <span class="p">{</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="profilelen">Profile.len</h3>
+
+<p>Provides the length of the Profile indicated by prof, or the length of this Profile if prof is not provided</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>prof: the profile for which to obtain list length.</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">Profile</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prof</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">prof</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
             <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
@@ -475,9 +519,7 @@ which to obtain the intersection</p></div></div><div class="code"><div class="wr
             <span class="k">return</span> <span class="nx">prof</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">};</span>
-    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="node-clone-provided-by-paul-vorbach">node-clone provided by Paul Vorbach</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper">    <span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Copyright © 2011-2013 Paul Vorbach
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p></div></div><div class="code"><div class="wrapper">    
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="node-clone-provided-by-paul-vorbach">node-clone provided by Paul Vorbach</h2></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Copyright © 2011-2013 Paul Vorbach</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p></div></div><div class="code"><div class="wrapper">    
     <span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">circular</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">circular</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">){</span>
             <span class="nx">circular</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
@@ -584,18 +626,30 @@ circular references for it</p></div></div><div class="code"><div class="wrapper"
   <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">exports</span><span class="o">:</span> <span class="p">{}</span> <span class="p">},</span> <span class="nx">exports</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span>
     <span class="p">,</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;ender&quot;</span><span class="p">)</span>
     <span class="p">;</span>
-  
-  
-    <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;setimmediate&quot;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">Node</span> <span class="o">=</span>  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jqgram/lib/node.js&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">Profile</span> <span class="o">=</span>  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jqgram/lib/profile.js&#39;</span><span class="p">);</span>
+  </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h1 id="jqgram">JQGram</h1></div></div><div class="code"><div class="wrapper">    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Utilizes setImmediate </p></div></div><div class="code"><div class="wrapper">    <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;setimmediate&quot;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="nodejs">node.js</h2>
+
+<p>Defines a Node of a tree as containing a label and an array of children.</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">Node</span> <span class="o">=</span>  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jqgram/lib/node.js&#39;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="profilejs">profile.js</h2>
+
+<p>The guts of the pq-gram algorithm</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">Profile</span> <span class="o">=</span>  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jqgram/lib/profile.js&#39;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="shiftregisterjs">shiftregister.js</h2>
+
+<p>Convenience for profile.js and differs slightly from the Python PyGram implementation from which jqgram was originally ported.</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">ShiftRegister</span> <span class="o">=</span>  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jqgram/lib/shiftregister.js&#39;</span><span class="p">);</span>
     
     <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">exports</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">){</span>
     
         <span class="kd">var</span> <span class="nx">setImmediate</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">setImmediate</span> <span class="o">?</span> <span class="nx">setImmediate</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">){</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span> <span class="p">};</span>
-    
-        <span class="nx">exports</span><span class="p">.</span><span class="nx">jqgram</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="nx">distance</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roota</span><span class="p">,</span> <span class="nx">rootb</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h2 id="jqgram">jqgram</h2>
+
+<p>The jqgram object exposes one method and three constructors, however in typical usage, only the distance method is used.  Node, Profile, and ShiftRegister are however exposed for custom requirements.</p></div></div><div class="code"><div class="wrapper">    
+        <span class="nx">exports</span><span class="p">.</span><span class="nx">jqgram</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><h3 id="distance">distance</h3>
+
+<p>Allows easy generation of two profiles defined by root nodes, and returns the resulting pq-gram edit distance approximation.
+Please see the examples on github for more details on how to use the distance function to define the trees, the p and q options, and the callback (cb) function that is provided with the resulting pq-gram edit distance.</p></div></div><div class="code"><div class="wrapper">        </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>roota: An object that contains the root of the first tree with the lfn (label callback function) and cfn (child callback function) defined.</li>
+<li>roota: An object that represents the root of the second tree with the lfn (label callback function) and cfn (child callback function) defined.</li>
+<li>opts (optional): An object that contains p and q values, default: "{p: 2, q: 3}"</li>
+<li>cb: the callback function that will be executed with one argument, an object with a property "distance" that contains a float value between 0.0 and 1.0 representing the pq-gram edit distance  approximation between the trees rooted at roota and rootb.</li>
+</ul></div></div><div class="code"><div class="wrapper">            <span class="nx">distance</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roota</span><span class="p">,</span> <span class="nx">rootb</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">opts</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="nx">cb</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">,</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{};</span>
                 <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span> <span class="o">||</span> <span class="mi">2</span><span class="p">;</span>
                 <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span> <span class="o">||</span> <span class="mi">3</span><span class="p">;</span>
                 <span class="nx">setImmediate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -605,13 +659,16 @@ circular references for it</p></div></div><div class="code"><div class="wrapper"
                     <span class="kd">var</span> <span class="nx">profb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Profile</span><span class="p">(</span><span class="nx">nodeb</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">p</span><span class="p">,</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">q</span><span class="p">);</span>
                     <span class="nx">cb</span><span class="p">({</span> <span class="s2">&quot;distance&quot;</span><span class="o">:</span> <span class="nx">profa</span><span class="p">.</span><span class="nx">edit_distance</span><span class="p">(</span><span class="nx">profb</span><span class="p">)</span> <span class="p">});</span>
                 <span class="p">});</span>
-            <span class="p">},</span>
-            <span class="nx">Node</span><span class="o">:</span> <span class="nx">Node</span><span class="p">,</span>
-            <span class="nx">Profile</span><span class="o">:</span> <span class="nx">Profile</span>
+            <span class="p">},</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>Node: allow creation of basic nodes with labels and children</li>
+</ul></div></div><div class="code"><div class="wrapper">            <span class="nx">Node</span><span class="o">:</span> <span class="nx">Node</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>Profile: allows edit_distances to be determined between manuallly created profiles </li>
+</ul></div></div><div class="code"><div class="wrapper">            <span class="nx">Profile</span><span class="o">:</span> <span class="nx">Profile</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><ul>
+<li>ShiftRegister: mainly exposed for test cases, not typically used by developers</li>
+</ul></div></div><div class="code"><div class="wrapper">            <span class="nx">ShiftRegister</span><span class="o">:</span> <span class="nx">ShiftRegister</span>
         <span class="p">};</span>
     
-    
-    <span class="p">})(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">jqgram</span> <span class="o">=</span> <span class="p">{}</span> <span class="o">:</span> <span class="nx">exports</span><span class="p">);</span>
+    </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>allow jqgram to be utilized in browser or node environments:</p></div></div><div class="code"><div class="wrapper">    <span class="p">})(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">jqgram</span> <span class="o">=</span> <span class="p">{}</span> <span class="o">:</span> <span class="nx">exports</span><span class="p">);</span>
     
     
     
