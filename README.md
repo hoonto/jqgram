@@ -10,6 +10,8 @@ jqgram is currently used in applications in private beta at hoonto.com and clipw
 
 <a href="http://hoonto.github.io/jqgram/index.html">Documentation in progress</a> (using <a href="http://nevir.github.io/groc">Groc</a>)
 
+Node versions supported: 0.8+: <img alt="travis-ci" src="https://api.travis-ci.org/hoonto/jqgram.png"/>
+
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
 Note: IE is not passing tests according to testling, however I will dig into this at a later date, please let me know if this is critical for your application and enter an issue.
