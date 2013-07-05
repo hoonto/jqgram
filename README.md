@@ -1,24 +1,16 @@
-# jqgram
+# jqgram  [![Build Status](https://travis-ci.org/hoonto/jqgram?branch=master)](https://travis-ci.org/hoonto/jqgram)
 
-This module implements the PQ-Gram tree edit distance approximation algorithm for both server-side and browser-side applications; O(n log n) time and O(n) space performant where n is number of nodes in the trees.
+> jqgram implements the PQ-Gram tree edit distance approximation algorithm for both server-side and browser applications; O(n log n) time and O(n) space performant where n is number of nodes in the trees.
 
-The PQ-Gram approximation is much faster than obtaining the true edit distance via Zhang & Shasha, Klein, or Guha et. al, whom provide true edit distance algorithms that all perform around O(n<sup>3</sup>) or O(n<sup>2</sup>) time in O(n) space and are therefore unsuitable for many applications at scale.
+> The PQ-Gram approximation is much faster than obtaining the true edit distance via Zhang & Shasha, Klein, or Guha et. al, whom provide true edit distance algorithms that all perform around O(n<sup>3</sup>) or O(n<sup>2</sup>) time in O(n) space and are therefore unsuitable for many applications at scale.
 
-Often in real-world applications it is not necessary to know the true edit distance if a relative approximation of multiple trees to a known standard can be obtained.  Javascript, in the browser and now on the server with the advent of Node.js deal frequently with tree structures and end-user performance is usually critical in algorithm implementation and design; thus jqgram.
+> Often in real-world applications it is not necessary to know the true edit distance if a relative approximation of multiple trees to a known standard can be obtained.  Javascript, in the browser and now on the server with the advent of Node.js deal frequently with tree structures and end-user performance is usually critical in algorithm implementation and design; thus jqgram.
 
-jqgram is currently used in applications in private beta at hoonto.com and clipwidget.com. 
-
-<a href="http://hoonto.github.io/jqgram/index.html">Documentation in progress</a> (using <a href="http://nevir.github.io/groc">Groc</a>)
-
-Node 0.8+ supported:
-
-<img alt="travis-ci" src="https://api.travis-ci.org/hoonto/jqgram.png"/>
+Node <code>&gt;= 0.8.0</code> supported.
 
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
 
 Note: IE is not passing tests according to testling, however I will dig into this at a later date, please let me know if this is critical for your application and enter an issue.
-
-Please also note that I am currently generating documentation so the project will be in a little bit of flux over the next couple days.
 
 Rgds....Hoonto/Matt
 
