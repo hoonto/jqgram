@@ -1,4 +1,4 @@
-# jqgram  [![Build Status](https://travis-ci.org/hoonto/jqgram?branch=master)](https://travis-ci.org/hoonto/jqgram)
+# jqgram  [![Build Status](https://travis-ci.org/hoonto/jqgram.png)](https://travis-ci.org/hoonto/jqgram)
 
 > jqgram implements the PQ-Gram tree edit distance approximation algorithm for both server-side and browser applications; O(n log n) time and O(n) space performant where n is number of nodes in the trees.
 
