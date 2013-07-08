@@ -6,6 +6,8 @@
 
 > Often in real-world applications it is not necessary to know the true edit distance if a relative approximation of multiple trees to a known standard can be obtained.  Javascript, in the browser and now on the server with the advent of Node.js deal frequently with tree structures and end-user performance is usually critical in algorithm implementation and design; thus jqgram.
 
+[Documentation in progress](http://hoonto.github.io/jqgram/index.html) using [Groc and markdown](http://nevir.github.io/groc)
+
 Node <code>&gt;= 0.8.0</code> supported.
 
 [![browser support](http://ci.testling.com/hoonto/jqgram.png)](http://ci.testling.com/hoonto/jqgram)
